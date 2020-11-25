@@ -1,0 +1,42 @@
+creature
+1
+5
+node
+1
+You don't look like you're from around here.
+I've lived here all my life!
+2
+I came here from Newton.
+3
+node
+2
+Oh really? Then you must know Mr. Bowler.
+Mr. Bowler is a good friend of mine!
+4
+Who?
+5
+node
+3
+Newton, eh? I heard there's trouble brewing down there.
+I haven't heard about any trouble.
+5
+Did I say Newton? I'm actually from Springville.
+2
+node
+4
+You liar! There ain't no Mr. Bowler, I made him up!
+node
+5
+Don't you worry about it. Say, do you have something to eat? I'm starving.
+creature
+0
+1
+node
+1
+hallo!
+creature
+2
+1
+node
+1
+Ik ben het, Loes!

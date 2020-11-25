@@ -1,0 +1,93 @@
+creature
+1
+2
+node
+1
+Maamaa!
+Hee Jip! Waar is mijn cadeautje verstopt?
+2
+node
+2
+Pan! Pan!
+creature
+2
+3
+node
+1
+Hallo Lieke! Gefeliciteerd met je verjaardag! Hoe oud ben je geworden vandaag?
+30
+2
+31
+3
+node
+2
+Nee, dat klopt niet!
+node
+3
+Helemaal goed! Je wint de prijs! Vraag maar aan Jip waar hij is verstopt...
+creature
+3
+1
+node
+1
+Mauw! Mauw!
+creature
+4
+1
+node
+1
+Wrouwre!
+creature
+5
+1
+node
+1
+Boem!
+creature
+6
+1
+node
+1
+Boem!
+creature
+7
+1
+node
+1
+Boem!
+creature
+8
+1
+node
+1
+Een pan! Met een briefje erin!
+creature
+9
+1
+node
+1
+Boem!
+creature
+10
+1
+node
+1
+Boem!
+creature
+11
+1
+node
+1
+Een koffer! Met een briefje erin!
+creature
+12
+1
+node
+1
+Boem!
+creature
+13
+1
+node
+1
+Een briefje achter het gordijn!
