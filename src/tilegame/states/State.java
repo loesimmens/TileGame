@@ -14,7 +14,7 @@ import tilegame.Game;
  */
 public abstract class State 
 {
-    private Game game;
+    protected Game game;
     
     public State(Game game)
     {
