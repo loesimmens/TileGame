@@ -22,6 +22,7 @@ import tilegame.tiles.TileManager;
 import tilegame.ui.ClickListener;
 import tilegame.ui.UIImageButton;
 import tilegame.ui.UIManager;
+import tilegame.ui.UITextButton;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
@@ -79,7 +80,16 @@ public class Game implements Runnable
         uiManager = new UIManager();
         mouseManager.setUIManager(uiManager);
                 
-        uiManager.addObjectToMenu("startButton", new UIImageButton(width / 2 - 64, 320, 128, 64, Assets.getAssets().imageArrayMap.get("btn_start"), new ClickListener() 
+//        uiManager.addObjectToMenu("startButton", new UIImageButton(width / 2 - 64, 320, 128, 64, Assets.getAssets().imageArrayMap.get("btn_start"), new ClickListener() 
+//        {
+//            @Override
+//            public void onClick() 
+//            {
+//                mouseManager.setUIManager(null);
+//                StateManager.getStateManager().setState(gameState);
+//            }
+//        }));
+        uiManager.addObjectToMenu("startButton", new UITextButton(width / 2 - 64, 304, 128, 64, Assets.getAssets().imageArrayMap.get("btn_empty"), "START", new ClickListener() 
         {
             @Override
             public void onClick() 
@@ -87,8 +97,18 @@ public class Game implements Runnable
                 mouseManager.setUIManager(null);
                 StateManager.getStateManager().setState(gameState);
             }
-        }));
-        
+        }
+        ));
+        uiManager.addObjectToMenu("optionsButton", new UITextButton(width / 2 - 80, 384, 160, 64, Assets.getAssets().imageArrayMap.get("btn_empty"), "OPTIONS", new ClickListener() 
+        {
+            @Override
+            public void onClick() 
+            {
+                mouseManager.setUIManager(null);
+                StateManager.getStateManager().setState(optionsState);
+            }
+        }
+        ));
     }
     
     private void initDisplay()
@@ -119,7 +139,7 @@ public class Game implements Runnable
             StateManager.getStateManager().getState().tick();
             uiManager.tick();
         }
-        if(StateManager.getStateManager().getState() == gameState)
+        if(StateManager.getStateManager().getState() != menuState)
         {
             if(keyManager.hasJustBeenPressed(KeyEvent.VK_ESCAPE))
             {
