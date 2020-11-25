@@ -96,6 +96,12 @@ public class Assets
                     sheet.crop(width * 6, height * 4, width * 2, height)
                 });
         
+        imageArrayMap.put("btn_empty", new BufferedImage[]
+        {
+            sheet.crop(width * 4, height * 5, width * 2, height),
+            sheet.crop(0, height * 5, width * 2, height)
+        });
+        
         creatureAnimMap = new HashMap<>(); //stores all the animations for a single creature
         
         
