@@ -18,7 +18,6 @@ import tilegame.worlds.WorldLoader;
  */
 public class GameState extends State
 {
-    private Game game;
     private World world;
     
     //Inventory
@@ -28,7 +27,6 @@ public class GameState extends State
     public GameState(Game game)
     {
         super(game);
-        this.game = game;
         world = WorldLoader.loadWorld(this, "res/worlds/houseInside.txt");
         
         //Inventory
