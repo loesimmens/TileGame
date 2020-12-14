@@ -14,7 +14,7 @@ import tilegame.worlds.World;
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public class ItemManager 
+public class ItemManager implements java.io.Serializable
 {
     private ArrayList<Item> items; 
     private World world;
