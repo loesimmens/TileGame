@@ -56,15 +56,18 @@ public class InventoryPanel
             active = !active;
         if(!active)
             return;
-        if(gameState.getGame().getKeyManager().hasJustBeenPressed(KeyEvent.VK_W))
-            selectedItem--;
-        if(gameState.getGame().getKeyManager().hasJustBeenPressed(KeyEvent.VK_S))
-            selectedItem++;
-        
-        if(selectedItem < 0)
-            selectedItem = inventory.getInventoryItems().size() - 1;
-        else if(selectedItem >= inventory.getInventoryItems().size())
-            selectedItem = 0;
+        if(!inventory.getInventoryItems().isEmpty()) //if empty, still show screen, but do not try to scroll through items
+        {
+            if(gameState.getGame().getKeyManager().hasJustBeenPressed(KeyEvent.VK_W))
+                selectedItem--;
+            if(gameState.getGame().getKeyManager().hasJustBeenPressed(KeyEvent.VK_S))
+                selectedItem++;
+
+            if(selectedItem < 0)
+                selectedItem = inventory.getInventoryItems().size() - 1;
+            else if(selectedItem >= inventory.getInventoryItems().size())
+                selectedItem = 0;
+        }
     }
     
     public void render(Graphics g)
@@ -72,28 +75,31 @@ public class InventoryPanel
         if(!active)
             return;
         
-        if(inventory.getInventoryItems().isEmpty()) //todo
-            return;
+//        if(inventory.getInventoryItems().isEmpty()) //todo
+//            return;
         
         g.drawImage(Assets.getAssets().imageMap.get("inventoryScreen"), invX, invY, invWidth, invHeight, null);
         
-        renderItemsInInventory(g);
-        renderSelectedItem(g);
-        
-        if(inventory.getInventoryItems().get(selectedItem) instanceof Note)
+        if(!inventory.getInventoryItems().isEmpty())
         {
-            Note note = (Note)inventory.getInventoryItems().get(selectedItem);
+            renderItemsInInventory(g);
+            renderSelectedItem(g);
         
-            if(!note.isActive() && gameState.getGame().getKeyManager().hasJustBeenPressed(KeyEvent.VK_E))
+            if(inventory.getInventoryItems().get(selectedItem) instanceof Note)
             {
-                note.setActive(true);
+                Note note = (Note)inventory.getInventoryItems().get(selectedItem);
+
+                if(!note.isActive() && gameState.getGame().getKeyManager().hasJustBeenPressed(KeyEvent.VK_E))
+                {
+                    note.setActive(true);
+                }
+                else if(note.isActive() && gameState.getGame().getKeyManager().hasJustBeenPressed(KeyEvent.VK_E))
+                {
+                    note.setActive(false);
+                }
+                if(note.isActive())
+                   renderNote(g);
             }
-            else if(note.isActive() && gameState.getGame().getKeyManager().hasJustBeenPressed(KeyEvent.VK_E))
-            {
-                note.setActive(false);
-            }
-            if(note.isActive())
-               renderNote(g);
         }
     }
     
