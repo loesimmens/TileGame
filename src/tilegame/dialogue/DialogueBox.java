@@ -10,7 +10,6 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import tilegame.gfx.Assets;
 import tilegame.gfx.Text;
-import tilegame.states.GameState;
 import tilegame.utils.Utils;
 import tilegame.worlds.World;
 
@@ -18,7 +17,7 @@ import tilegame.worlds.World;
  *
  * @author Loes Immens
  */
-public class DialogueBox 
+public class DialogueBox implements java.io.Serializable
 {
     private final int x, y, width, height; 
     private int maxTokensPerLine;

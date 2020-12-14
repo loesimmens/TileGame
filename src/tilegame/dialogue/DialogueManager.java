@@ -16,7 +16,7 @@ import tilegame.worlds.World;
  *
  * @author Loes Immens
  */
-public class DialogueManager 
+public class DialogueManager implements java.io.Serializable
 {
     private HashMap<Integer, Dialogue> dialogueMap;
     private World world;

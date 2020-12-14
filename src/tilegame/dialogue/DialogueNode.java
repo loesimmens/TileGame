@@ -11,7 +11,7 @@ import java.util.HashMap;
  *
  * @author Loes Immens
  */
-public class DialogueNode 
+public class DialogueNode implements java.io.Serializable
 {
     private int nodeID;
     private String text;

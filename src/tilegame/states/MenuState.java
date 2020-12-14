@@ -11,10 +11,7 @@ import tilegame.Game;
 import tilegame.entities.creatures.Creature;
 import tilegame.gfx.Assets;
 import tilegame.gfx.Text;
-import tilegame.ui.ClickListener;
-import tilegame.ui.UIImageButton;
 import tilegame.ui.UIManager;
-import tilegame.ui.UIObject;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
@@ -45,6 +42,6 @@ public class MenuState extends State
         g.drawImage(Assets.getAssets().creatureAnimMap.get(2).get("down")[0], 
                 384, 96, Creature.DEFAULT_CREATURE_WIDTH * 2, Creature.DEFAULT_CREATURE_HEIGHT * 2, null);
         
-        Text.drawString(g, "Liekes verjaardag!", 152, 256, false, Color.red, Assets.getAssets().font28);
+        //Text.drawString(g, "Liekes verjaardag!", 152, 256, false, Color.red, Assets.getAssets().font28); //todo: remove
     }
 }

@@ -9,7 +9,7 @@ package tilegame.dialogue;
  *
  * @author Loes Immens
  */
-public class DialogueOption 
+public class DialogueOption implements java.io.Serializable
 {
     private String text;
     private DialogueNode sourceNode;

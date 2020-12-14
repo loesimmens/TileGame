@@ -16,7 +16,7 @@ import tilegame.worlds.World;
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public class Player extends Creature
+public class Player extends Creature implements java.io.Serializable
 {
     //World
     private World world;

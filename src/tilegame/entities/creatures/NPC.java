@@ -11,7 +11,7 @@ import tilegame.worlds.World;
 /**
  * @author Loes Immens
  */
-public class NPC extends Creature
+public class NPC extends Creature implements java.io.Serializable
 {
     public NPC(World world, float x, float y, int width, int height, int id, String name)
     {
