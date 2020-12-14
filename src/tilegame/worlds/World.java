@@ -24,7 +24,7 @@ import tilegame.tiles.TileManager;
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public class World 
+public class World implements java.io.Serializable
 {
     private GameState gameState;
     private int width, height; //in amount of tiles
