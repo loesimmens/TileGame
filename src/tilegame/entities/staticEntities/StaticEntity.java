@@ -16,7 +16,7 @@ import tilegame.worlds.World;
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public class StaticEntity extends Entity
+public class StaticEntity extends Entity implements java.io.Serializable
 {
     private String name;
     private boolean dropping;
