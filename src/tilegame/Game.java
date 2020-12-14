@@ -13,6 +13,8 @@ import tilegame.gfx.Assets;
 import tilegame.gfx.GameCamera;
 import tilegame.input.KeyManager;
 import tilegame.input.MouseManager;
+import tilegame.saves.ResourceManager;
+import tilegame.saves.SaveData;
 import tilegame.states.GameState;
 import tilegame.states.MenuState;
 import tilegame.states.OptionsState;
@@ -20,7 +22,6 @@ import tilegame.states.State;
 import tilegame.states.StateManager;
 import tilegame.tiles.TileManager;
 import tilegame.ui.ClickListener;
-import tilegame.ui.UIImageButton;
 import tilegame.ui.UIManager;
 import tilegame.ui.UITextButton;
 
@@ -79,17 +80,8 @@ public class Game implements Runnable
         
         uiManager = new UIManager();
         mouseManager.setUIManager(uiManager);
-                
-//        uiManager.addObjectToMenu("startButton", new UIImageButton(width / 2 - 64, 320, 128, 64, Assets.getAssets().imageArrayMap.get("btn_start"), new ClickListener() 
-//        {
-//            @Override
-//            public void onClick() 
-//            {
-//                mouseManager.setUIManager(null);
-//                StateManager.getStateManager().setState(gameState);
-//            }
-//        }));
-        uiManager.addObjectToMenu("startButton", new UITextButton(width / 2 - 64, 304, 128, 64, Assets.getAssets().imageArrayMap.get("btn_empty"), "START", new ClickListener() 
+  
+        uiManager.addObjectToMenu("startButton", new UITextButton(width / 2 - 80, 256, 160, 32, Assets.getAssets().imageArrayMap.get("btn_empty"), "START", new ClickListener() 
         {
             @Override
             public void onClick() 
@@ -99,7 +91,52 @@ public class Game implements Runnable
             }
         }
         ));
-        uiManager.addObjectToMenu("optionsButton", new UITextButton(width / 2 - 80, 384, 160, 64, Assets.getAssets().imageArrayMap.get("btn_empty"), "OPTIONS", new ClickListener() 
+        uiManager.addObjectToMenu("loadButton", new UITextButton(width / 2 - 80, 304, 160, 32, Assets.getAssets().imageArrayMap.get("btn_empty"), "LOAD", new ClickListener() 
+        {
+            @Override
+            public void onClick() 
+            {
+                try
+                {
+                    SaveData data = (SaveData) ResourceManager.load("1.save");
+                    getGameState().getWorld().getPlayer().setHealth(data.getHealth());
+                    getGameState().getWorld().getPlayer().setX(data.getX());
+                    getGameState().getWorld().getPlayer().setY(data.getY());
+                    //getGameState().getInventory().setInventoryItems(data.getInventoryItems());
+                    mouseManager.setUIManager(null);
+                    StateManager.getStateManager().setState(gameState);
+                }
+                catch(Exception e)
+                {
+                    System.out.println("Couldn't load save data: " + e.getMessage());
+                }
+            }
+        }
+        ));
+        uiManager.addObjectToMenu("saveButton", new UITextButton(width / 2 - 80, 352, 160, 32, Assets.getAssets().imageArrayMap.get("btn_empty"), "SAVE", new ClickListener() 
+        {
+            @Override
+            public void onClick() 
+            {
+                SaveData data = new SaveData();
+                data.setName("player");
+                data.setHealth(getGameState().getWorld().getPlayer().getHealth());
+                data.setX(getGameState().getWorld().getPlayer().getX());
+                data.setY(getGameState().getWorld().getPlayer().getY());
+                //data.setInventoryItems(getGameState().getInventory().getInventoryItems());
+                
+                try
+                {
+                    ResourceManager.save(data, "1.save");
+                }
+                catch(Exception e)
+                {
+                    System.out.println("Couldn't save: " + e.getMessage());
+                }
+            }
+        }
+        ));
+        uiManager.addObjectToMenu("optionsButton", new UITextButton(width / 2 - 80, 400, 160, 32, Assets.getAssets().imageArrayMap.get("btn_empty"), "OPTIONS", new ClickListener() 
         {
             @Override
             public void onClick() 
@@ -147,7 +184,6 @@ public class Game implements Runnable
                 StateManager.getStateManager().setState(menuState);
             }
         }
-        
     }
     
     //draws things to the screen
