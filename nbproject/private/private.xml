@@ -4,23 +4,17 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/items/ItemManager.java</file>
-            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/entities/Entity.java</file>
-            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/entities/creatures/Creature.java</file>
-            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/dialogue/DialogueBox.java</file>
-            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/states/MenuState.java</file>
-            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/entities/creatures/NPC.java</file>
-            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/inventory/InventoryPanel.java</file>
-            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/entities/creatures/Player.java</file>
-            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/states/GameState.java</file>
+            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/entities/EntityManager.java</file>
+            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/dialogue/DialogueNode.java</file>
+            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/dialogue/Dialogue.java</file>
+            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/dialogue/DialogueOption.java</file>
+            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/saves/ResourceManager.java</file>
             <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/Game.java</file>
             <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/entities/staticEntities/StaticEntity.java</file>
             <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/dialogue/DialogueManager.java</file>
-            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/tiles/Tile.java</file>
             <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/worlds/World.java</file>
-            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/gfx/Assets.java</file>
             <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/items/Item.java</file>
-            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/res/worlds/world1.txt</file>
-            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/tiles/TileManager.java</file>
+            <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/saves/SaveData.java</file>
             <file>file:/C:/Users/Gebruiker/Documents/NetBeansProjects/TileGame/src/tilegame/inventory/Inventory.java</file>
         </group>
     </open-files>
