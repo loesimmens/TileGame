@@ -11,7 +11,7 @@ import java.util.HashMap;
  *
  * @author Loes Immens
  */
-public class Dialogue 
+public class Dialogue implements java.io.Serializable
 {
     private int creatureID,
             nNodes;
