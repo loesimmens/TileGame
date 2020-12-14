@@ -14,7 +14,7 @@ import tilegame.gfx.Assets;
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public class Item 
+public class Item implements java.io.Serializable
 {
     private ItemManager itemManager;
     
@@ -30,7 +30,10 @@ public class Item
     
     public static final int ITEMWIDTH = 32, ITEMHEIGHT = 32;
     
-    protected BufferedImage texture;
+    /**
+     *made transient, because BufferedImage is not Serializable and this field doesn't have to be Serialized.
+     */
+    protected transient BufferedImage texture;
     protected String name;
     protected final int id;
     
