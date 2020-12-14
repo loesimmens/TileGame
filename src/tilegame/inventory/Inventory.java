@@ -45,4 +45,9 @@ public class Inventory
     {
         return inventoryItems;
     }
+
+    public void setInventoryItems(ArrayList<Item> inventoryItems) 
+    {
+        this.inventoryItems = inventoryItems;
+    }
 }
