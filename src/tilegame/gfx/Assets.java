@@ -38,13 +38,13 @@ public class Assets
         font14 = FontLoader.loadFont("res/fonts/slkscr.ttf", 14);
         font28 = FontLoader.loadFont("res/fonts/slkscr.ttf", 28);
         
-        SpriteSheet sheet = new SpriteSheet(ImageLoader.loadImage("/textures/sheet.png"));
-        SpriteSheet creatureSheet = new SpriteSheet(ImageLoader.loadImage("/textures/creatureSheet.png"));
+        SpriteSheet sheet = new SpriteSheet(ImageLoader.loadImage("res/textures/sheet.png"));
+        SpriteSheet creatureSheet = new SpriteSheet(ImageLoader.loadImage("res/textures/creatureSheet.png"));
         
         imageMap = new HashMap<>();
         
-        imageMap.put("inventoryScreen", ImageLoader.loadImage("/textures/inventoryScreen.png"));
-        imageMap.put("dialogueBox", ImageLoader.loadImage("/textures/window_bg.png"));
+        imageMap.put("inventoryScreen", ImageLoader.loadImage("res/textures/inventoryScreen.png"));
+        imageMap.put("dialogueBox", ImageLoader.loadImage("res/textures/window_bg.png"));
         
         //Tiles
         imageMap.put("dirt", sheet.crop(width, 0, width, height));
