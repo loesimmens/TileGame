@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="TileGame">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/TileGame.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

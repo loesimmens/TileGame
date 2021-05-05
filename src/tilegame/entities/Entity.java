@@ -5,14 +5,15 @@
  */
 package tilegame.entities;
 
-import java.awt.Graphics;
-import java.awt.Rectangle;
 import tilegame.dialogue.Dialogue;
 import tilegame.worlds.World;
+
+import java.awt.*;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
+ *
  */
 public abstract class Entity 
 {
