@@ -5,9 +5,10 @@
  */
 package tilegame.display;
 
-import java.awt.Canvas;
-import java.awt.Dimension;
-import javax.swing.JFrame;
+import tilegame.Game;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
@@ -15,38 +16,36 @@ import javax.swing.JFrame;
  */
 public class Display 
 {
-    private JFrame frame;
-    private Canvas canvas;
+    private static final Display display = new Display();
+    private static final JFrame frame;
+    private static final Canvas canvas;
     
-    private String title;
-    private int width, height;
-    
-    public Display(String title, int width, int height)
-    {
-        this.title = title;
-        this.width = width;
-        this.height = height;
-        
-        createDisplay();
-    }
-    
-    private void createDisplay()
-    {
+    private static final String title = "Tile Game!";
+    private static final int WIDTH = Game.getWidth();
+    private static final int HEIGHT = Game.getHeight();
+
+    static {
         frame = new JFrame(title);
-        frame.setSize(width, height);
+        frame.setSize(WIDTH, HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        
+
         canvas = new Canvas();
-        canvas.setPreferredSize(new Dimension(width, height));
-        canvas.setMaximumSize(new Dimension(width, height));
-        canvas.setMinimumSize(new Dimension(width, height));
+        canvas.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        canvas.setMaximumSize(new Dimension(WIDTH, HEIGHT));
+        canvas.setMinimumSize(new Dimension(WIDTH, HEIGHT));
         canvas.setFocusable(false);
-        
+
         frame.add(canvas);
         frame.pack();
+    }
+
+    private Display() {}
+
+    public static final Display getInstance(){
+        return display;
     }
     
     public Canvas getCanvas()

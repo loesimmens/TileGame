@@ -17,7 +17,7 @@ public class Launcher
      */
     public static void main(String[] args) 
     {
-        Game.getInstance().init("Tile Game!", 640, 480);
+        Game.getInstance().init(640, 480);
         Game.getInstance().start();
     }
     

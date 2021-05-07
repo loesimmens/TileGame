@@ -36,7 +36,6 @@ public class Game implements Runnable
     
     private Display display;
     private static int width, height;
-    public String title;
     
     private boolean running = false;
     private Thread thread;
@@ -61,11 +60,10 @@ public class Game implements Runnable
             
     private Game(){}
     
-    public void init(String title, int width, int height)
+    public void init(int width, int height)
     {
         Game.width = width;
         Game.height = height;
-        this.title = title;
         Assets.getAssets().init();
         initStates();
         keyManager = KeyManager.getInstance();
@@ -152,7 +150,7 @@ public class Game implements Runnable
     
     private void initDisplay()
     {
-        display = new Display(title, width, height);
+        display = Display.getInstance();
         display.getFrame().addKeyListener(keyManager);
         display.getFrame().addMouseListener(mouseManager);
         display.getFrame().addMouseMotionListener(mouseManager);
