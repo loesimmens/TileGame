@@ -6,6 +6,8 @@
 package tilegame.dialogue;
 
 import tilegame.Game;
+import tilegame.entities.StateMachine;
+import tilegame.entities.creatures.Player;
 import tilegame.gfx.Assets;
 import tilegame.gfx.Text;
 import tilegame.utils.Listener;
@@ -120,17 +122,19 @@ public class DialogueBox implements java.io.Serializable, Listener
 
     @Override
     public void update(Object o) {
-        if(o instanceof Integer){
-            int keyCode = (Integer) o;
-            if(keyCode > 0){
-                if(keyCode == KeyEvent.VK_1) //1
-                    setCurrentNode(dialogue, 1);
-                else if(keyCode == KeyEvent.VK_2) //2
-                    setCurrentNode(dialogue, 2);
-                if(dialogue.getCurrentNode().getOptions().isEmpty() && keyCode == KeyEvent.VK_E)
-                {
-                    active = false;
-                    dialogue.setCurrentNode(1);
+        if(Player.getInstance().getState().equals(StateMachine.INTERACTING)){
+            if(o instanceof Integer){
+                int keyCode = (Integer) o;
+                if(keyCode > 0){
+                    if(keyCode == KeyEvent.VK_1) //1
+                        setCurrentNode(dialogue, 1);
+                    else if(keyCode == KeyEvent.VK_2) //2
+                        setCurrentNode(dialogue, 2);
+                    if(dialogue.getCurrentNode().getOptions().isEmpty() && keyCode == KeyEvent.VK_E)
+                    {
+                        active = false;
+                        dialogue.setCurrentNode(1);
+                    }
                 }
             }
         }

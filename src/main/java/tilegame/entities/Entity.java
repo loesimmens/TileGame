@@ -17,7 +17,7 @@ import java.awt.*;
 public abstract class Entity 
 {
     public static final int DEFAULT_HEALTH = 3;
-    protected float x, y; //float because it achieves smooth movement
+    protected float x, y;
     protected int width, height;
     protected int health;
     protected boolean active = true;

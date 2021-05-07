@@ -172,8 +172,8 @@ public class Game implements Runnable
     {
         if(StateManager.getStateManager().getState() != null)
         {
-            StateManager.getStateManager().getState().tick();
             keyManager.tick();
+            StateManager.getStateManager().getState().tick();
             uiManager.tick();
         }
         if(StateManager.getStateManager().getState() != menuState)
