@@ -6,7 +6,7 @@
 package tilegame.entities.staticEntities;
 
 import tilegame.entities.Entity;
-import tilegame.entities.StateMachine;
+import tilegame.entities.State;
 import tilegame.gfx.Assets;
 import tilegame.gfx.GameCamera;
 import tilegame.items.Item;
@@ -61,7 +61,7 @@ public class StaticEntity extends Entity implements java.io.Serializable
     @Override
     public void interact() 
     {
-        state = StateMachine.INTERACTING;
+        state = State.INTERACTING;
         if(dropping)
         {
             for(int i = 0; i < items.length; i++)

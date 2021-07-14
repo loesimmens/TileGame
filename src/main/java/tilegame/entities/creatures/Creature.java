@@ -5,11 +5,11 @@
  */
 package tilegame.entities.creatures;
 
-import tilegame.Game;
 import tilegame.entities.Direction;
 import tilegame.entities.Entity;
 import tilegame.gfx.Animation;
 import tilegame.gfx.Assets;
+import tilegame.gfx.GameCamera;
 import tilegame.tiles.Tile;
 import tilegame.worlds.World;
 
@@ -23,18 +23,23 @@ import java.awt.image.BufferedImage;
 public abstract class Creature extends Entity
 {
     public static final float DEFAULT_SPEED = 3.0f;
-    public static final int DEFAULT_CREATURE_WIDTH = 64,
-                            DEFAULT_CREATURE_HEIGHT = 64;
+    public static final int DEFAULT_CREATURE_WIDTH = 64;
+    public static final int DEFAULT_CREATURE_HEIGHT = 64;
     
     protected float speed;
-    protected float xMove, yMove;
+    protected float xMove;
+    protected float yMove;
     
     protected Direction facing;
+
+    protected Animation animDown;
+    protected Animation animUp;
+    protected Animation animLeft;
+    protected Animation animRight;
+
+    protected Creature() {}
     
-    //Animations
-    protected Animation animDown, animUp, animLeft, animRight;
-    
-    public Creature(float x, float y, int width, int height, int id, String name)
+    protected Creature(float x, float y, int width, int height, int id, String name)
     {
         super(x, y, width, height, id, name);
         
@@ -72,8 +77,8 @@ public abstract class Creature extends Entity
     @Override
     public void render(Graphics g)
     {
-        g.drawImage(getCurrentAnimationFrame(), (int) (x - Game.getGameState().getGame().getGameCamera().getxOffset()),
-                (int) (y - Game.getGameState().getGame().getGameCamera().getyOffset()), width, height, null);
+        g.drawImage(getCurrentAnimationFrame(), (int) (x - GameCamera.getxOffset()),
+                (int) (y - GameCamera.getyOffset()), width, height, null);
     }
     
     public void move()

@@ -6,12 +6,16 @@
 package tilegame.items;
 
 import tilegame.entities.creatures.Player;
+import tilegame.entities.exceptions.PlayerException;
 import tilegame.gfx.Assets;
 import tilegame.gfx.GameCamera;
 import tilegame.inventory.Inventory;
+import tilegame.logger.TileGameLogger;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
@@ -45,6 +49,8 @@ public class Item implements java.io.Serializable
     protected int x, y, count;
     protected boolean pickedUp = false;
     protected boolean visible = false;
+
+    private static final Logger LOGGER = TileGameLogger.getLogger();
     
     public Item(BufferedImage texture, String name, int id)
     {
@@ -60,10 +66,13 @@ public class Item implements java.io.Serializable
     
     public void tick()
     {
-        if(Player.getInstance().getCollisionBounds(0f, 0f).intersects(bounds))
-        {
-            pickedUp = true;
-            Inventory.addItem(this);
+        try {
+            if (Player.getInstance().getCollisionBounds(0f, 0f).intersects(bounds)) {
+                pickedUp = true;
+                Inventory.addItem(this);
+            }
+        } catch (PlayerException e) {
+            LOGGER.log(Level.SEVERE, "Player not created yet", e);
         }
     }
     

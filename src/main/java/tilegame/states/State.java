@@ -5,23 +5,14 @@
  */
 package tilegame.states;
 
-import java.awt.Graphics;
-import tilegame.Game;
+import java.awt.*;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public abstract class State 
+public interface State
 {
-    protected Game game;
-    
-    public State(Game game)
-    {
-        this.game = game;
-    }
-    
-    public abstract void tick();
-    
-    public abstract void render(Graphics g);
+    void tick();
+    void render(Graphics g);
 }

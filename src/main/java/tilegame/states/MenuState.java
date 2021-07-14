@@ -5,26 +5,18 @@
  */
 package tilegame.states;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import tilegame.Game;
 import tilegame.entities.creatures.Creature;
 import tilegame.gfx.Assets;
-import tilegame.gfx.Text;
 import tilegame.ui.UIManager;
+
+import java.awt.*;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public class MenuState extends State
-{
+public class MenuState implements State {
     private UIManager uiManager;
-    
-    public MenuState(Game game)
-    {
-        super(game);
-    }
 
     @Override
     public void tick() 

@@ -6,6 +6,7 @@
 package tilegame.entities;
 
 import tilegame.dialogue.DialogueManager;
+import tilegame.entities.creatures.Player;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class EntityManager implements java.io.Serializable
     private static final EntityManager entityManager = new EntityManager();
     private DialogueManager dialogueManager;
     private static ArrayList<Entity> entities;
+    private static ArrayList<Entity> allEntitiesExceptPlayer;
     private Comparator<Entity> renderSorter = new Comparator<Entity>()
     {
         @Override
@@ -38,6 +40,7 @@ public class EntityManager implements java.io.Serializable
         dialogueManager = DialogueManager.getInstance();
         
         entities = new ArrayList<>();
+        allEntitiesExceptPlayer = new ArrayList<>();
     }
 
     public static final EntityManager getInstance(){
@@ -70,6 +73,9 @@ public class EntityManager implements java.io.Serializable
     public void addEntity(Entity e)
     {
         entities.add(e);
+        if(!(e instanceof Player)) {
+            allEntitiesExceptPlayer.add(e);
+        }
     }
     
     @Override
@@ -83,9 +89,8 @@ public class EntityManager implements java.io.Serializable
         return entities;
     }
 
-    public void setEntities(ArrayList<Entity> entities) 
-    {
-        this.entities = entities;
+    public static ArrayList<Entity> getAllEntitiesExceptPlayer() {
+        return allEntitiesExceptPlayer;
     }
 
     public DialogueManager getDialogueManager() {

@@ -5,34 +5,32 @@
  */
 package tilegame.states;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import tilegame.Game;
 import tilegame.gfx.Assets;
 import tilegame.gfx.Text;
+
+import java.awt.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
  * @author Loes Immens
  */
-public class OptionsState extends State
-{
-    private final int leftX = game.getWidth() / 3;
-    private final int rightX = 2 * game.getWidth() / 3;
+public class OptionsState implements State {
+    private final int leftX = Game.getWidth() / 3;
+    private final int rightX = 2 * Game.getWidth() / 3;
     private LinkedHashMap<String, String> keySettings;
     
-    public OptionsState(Game game)
+    public OptionsState()
     {
-        super(game);
         setKeySettings();
     }
 
     @Override
     public void tick() 
     {
-        
+        throw new UnsupportedOperationException();
     }
 
     @Override

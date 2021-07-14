@@ -5,6 +5,7 @@
  */
 package tilegame.worlds;
 
+import tilegame.Game;
 import tilegame.entities.EntityManager;
 import tilegame.entities.creatures.Cat;
 import tilegame.entities.creatures.Creature;
@@ -12,6 +13,7 @@ import tilegame.entities.creatures.NPC;
 import tilegame.entities.creatures.Player;
 import tilegame.entities.staticEntities.StaticEntity;
 import tilegame.gfx.Assets;
+import tilegame.gfx.GameCamera;
 import tilegame.items.Item;
 import tilegame.items.ItemManager;
 import tilegame.items.Note;
@@ -44,7 +46,7 @@ public class World implements java.io.Serializable
         this.spawnY = spawnY;
         this.tiles = tiles;
         
-        player = Player.create(spawnX, spawnY);
+        player = Player.getInstance(spawnX, spawnY);
         entityManager = EntityManager.getInstance();
 
         Item[] counterItems = {Item.pan, new Note(Assets.getAssets().imageMap.get("note"), "note", 10, 
@@ -92,17 +94,17 @@ public class World implements java.io.Serializable
     public void render(Graphics g)
     {
         //these 4 variables instead of 0 and width/height, so not the entire map will be rendered if it's not visible through the camera
-        int xStart = (int) Math.max(0, gameState.getGame().getGameCamera().getxOffset() / Tile.TILEWIDTH);
-        int xEnd = (int) Math.min(width, (gameState.getGame().getGameCamera().getxOffset() + gameState.getGame().getWidth()) / Tile.TILEWIDTH + 1);
-        int yStart = (int) Math.max(0, gameState.getGame().getGameCamera().getyOffset() / Tile.TILEHEIGHT);
-        int yEnd = (int) Math.min(height, (gameState.getGame().getGameCamera().getyOffset() + gameState.getGame().getHeight()) / Tile.TILEHEIGHT + 1);
+        int xStart = (int) Math.max(0, GameCamera.getxOffset() / Tile.TILEWIDTH);
+        int xEnd = (int) Math.min(width, (GameCamera.getxOffset() + Game.getWidth()) / Tile.TILEWIDTH + 1);
+        int yStart = (int) Math.max(0, GameCamera.getyOffset() / Tile.TILEHEIGHT);
+        int yEnd = (int) Math.min(height, (GameCamera.getyOffset() + Game.getHeight()) / Tile.TILEHEIGHT + 1);
         
         for(int y = yStart; y < yEnd; y++)
         {
             for(int x = xStart; x < xEnd; x++)
             {
-                getTile(x, y).render(g, (int) (x * Tile.TILEWIDTH - gameState.getGame().getGameCamera().getxOffset()), 
-                        (int) (y * Tile.TILEHEIGHT - gameState.getGame().getGameCamera().getyOffset()));
+                getTile(x, y).render(g, (int) (x * Tile.TILEWIDTH - GameCamera.getxOffset()),
+                        (int) (y * Tile.TILEHEIGHT - GameCamera.getyOffset()));
             }
         }
 
