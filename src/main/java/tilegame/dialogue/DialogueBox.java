@@ -6,29 +6,35 @@
 package tilegame.dialogue;
 
 import tilegame.Game;
-import tilegame.entities.StateMachine;
+import tilegame.entities.State;
 import tilegame.entities.creatures.Player;
+import tilegame.entities.exceptions.PlayerException;
 import tilegame.gfx.Assets;
 import tilegame.gfx.Text;
+import tilegame.logger.TileGameLogger;
 import tilegame.utils.Listener;
 import tilegame.utils.Utils;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author Loes Immens
  */
 public class DialogueBox implements java.io.Serializable, Listener
 {
     private static final DialogueBox dialogueBox = new DialogueBox();
-    private final int x, y, width, height; 
-    private int maxTokensPerLine;
+    private final int x;
+    private final int y;
+    private final int width;
+    private final int height;
+    private final int maxTokensPerLine;
     private static boolean active = false;
-    private int keyJustPressed = -1;
-    private Dialogue dialogue;
-    
+    private static Dialogue dialogue;
+    private static final transient Logger LOGGER = TileGameLogger.getLogger();
+
     private DialogueBox()
     {
         maxTokensPerLine = 55;
@@ -41,22 +47,19 @@ public class DialogueBox implements java.io.Serializable, Listener
     
     public void tick()
     {
-        if(!active)
-            return;
-        if(dialogue.getCurrentNode() == null)
+        if(active && dialogue.getCurrentNode() == null)
         {
             active = false;
-            return;
         }
     }
 
-    private void setCurrentNode(Dialogue dialogue, int option)
+    private void setCurrentNode(int option)
     {
         if(!dialogue.getCurrentNode().getOptions().isEmpty())
             dialogue.setCurrentNode(dialogue.getCurrentNode().getOptions().get(option).getDestinationNodeID());
         else
         {
-            System.out.println("No option " + option + " available!");
+            LOGGER.log(Level.WARNING,"No option {} available!", option);
             dialogue.setCurrentNode(1);
         }
     }
@@ -76,7 +79,7 @@ public class DialogueBox implements java.io.Serializable, Listener
     
     public void displayCurrentNode(Graphics g, DialogueNode node)
     {
-        int optionCounter = 1;
+        var optionCounter = 1;
         int textX = x + 20;
         int textY = y + 20;
         
@@ -92,7 +95,7 @@ public class DialogueBox implements java.io.Serializable, Listener
         {
             textToDisplay = Utils.cutTextToFitLine(o.getText(), maxTokensPerLine);
             
-            boolean firstLine = true;
+            var firstLine = true;
             for(String line: textToDisplay.split("\n"))
             {
                 if(firstLine)
@@ -122,14 +125,14 @@ public class DialogueBox implements java.io.Serializable, Listener
 
     @Override
     public void update(Object o) {
-        if(Player.getInstance().getState().equals(StateMachine.INTERACTING)){
-            if(o instanceof Integer){
+        try{
+            if(Player.getInstance().getState().equals(State.INTERACTING) && o instanceof Integer){
                 int keyCode = (Integer) o;
                 if(keyCode > 0){
                     if(keyCode == KeyEvent.VK_1) //1
-                        setCurrentNode(dialogue, 1);
+                        setCurrentNode(1);
                     else if(keyCode == KeyEvent.VK_2) //2
-                        setCurrentNode(dialogue, 2);
+                        setCurrentNode(2);
                     if(dialogue.getCurrentNode().getOptions().isEmpty() && keyCode == KeyEvent.VK_E)
                     {
                         active = false;
@@ -137,6 +140,8 @@ public class DialogueBox implements java.io.Serializable, Listener
                     }
                 }
             }
+        } catch(PlayerException e) {
+            LOGGER.log(Level.SEVERE, "Player not created yet", e);
         }
     }
 

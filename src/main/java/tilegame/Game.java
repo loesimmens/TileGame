@@ -8,11 +8,13 @@ package tilegame;
 import tilegame.dialogue.DialogueBox;
 import tilegame.display.Display;
 import tilegame.entities.creatures.Player;
+import tilegame.entities.exceptions.PlayerException;
 import tilegame.gfx.Assets;
 import tilegame.gfx.GameCamera;
 import tilegame.input.KeyManager;
 import tilegame.input.MouseManager;
 import tilegame.inventory.InventoryPanel;
+import tilegame.logger.TileGameLogger;
 import tilegame.saves.ResourceManager;
 import tilegame.saves.SaveData;
 import tilegame.states.*;
@@ -25,6 +27,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
@@ -33,15 +37,15 @@ import java.util.List;
 public class Game implements Runnable
 {
     private static final Game game = new Game();
-    
-    private Display display;
-    private static int width, height;
+    private static final String PLAYER_NOT_CREATED_YET = "Player not created yet!";
+    private static final String BTN_EMPTY = "btn_empty";
+
+    private static Display display;
+    private static int width;
+    private static int height;
     
     private boolean running = false;
     private Thread thread;
-    
-    private BufferStrategy bs;
-    private Graphics g;
     
     //States
     private static State gameState;
@@ -49,25 +53,31 @@ public class Game implements Runnable
     private static State optionsState;
     
     //Input
-    private KeyManager keyManager;
-    private MouseManager mouseManager;
-    
-    //UI
-    private UIManager uiManager;
-    
-    //Camera
-    private GameCamera gameCamera;
+    private static KeyManager keyManager;
+    private static MouseManager mouseManager;
+
+    private static UIManager uiManager;
+
+    private static GameCamera gameCamera;
+
+    private static final Logger LOGGER = TileGameLogger.getLogger();
             
     private Game(){}
     
-    public void init(int width, int height)
+    public static void init(int width, int height)
     {
         Game.width = width;
         Game.height = height;
         Assets.getAssets().init();
         initStates();
         keyManager = KeyManager.getInstance();
-        KeyManager.subscribe(Player.getInstance(), List.of(KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_E, KeyEvent.VK_X, -1));
+        Player player;
+        try {
+            player = Player.getInstance();
+            KeyManager.subscribe(player, List.of(KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_E, KeyEvent.VK_X, -1));
+        } catch (PlayerException e) {
+            LOGGER.log(Level.SEVERE, PLAYER_NOT_CREATED_YET, e);
+        }
         KeyManager.subscribe(DialogueBox.getInstance(), List.of(KeyEvent.VK_1, KeyEvent.VK_2, KeyEvent.VK_E, -1));
         KeyManager.subscribe(InventoryPanel.getInstance(), List.of(KeyEvent.VK_I, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_E, -1));
         mouseManager = new MouseManager();
@@ -81,48 +91,46 @@ public class Game implements Runnable
         uiManager = new UIManager();
         mouseManager.setUIManager(uiManager);
   
-        uiManager.addObjectToMenu("startButton", new UITextButton(width / 2 - 80, 256, 160, 32, Assets.getAssets().imageArrayMap.get("btn_empty"), "START", new ClickListener() 
-        {
-            @Override
-            public void onClick() 
+        uiManager.addObjectToMenu("startButton", new UITextButton(width / 2 - 80, 256, 160, 32, Assets.getAssets().imageArrayMap.get(BTN_EMPTY), "START", () -> {
+            mouseManager.setUIManager(null);
+            StateManager.getStateManager().setState(gameState);
+        }
+        ));
+        uiManager.addObjectToMenu("loadButton", new UITextButton(width / 2 - 80, 304, 160, 32, Assets.getAssets().imageArrayMap.get(BTN_EMPTY), "LOAD", () -> {
+            try
             {
+                SaveData data = (SaveData) ResourceManager.load("1.save");
+                try {
+                    Player.getInstance().setHealth(data.getHealth());
+                    Player.getInstance().setX(data.getX());
+                    Player.getInstance().setY(data.getY());
+                } catch(PlayerException e) {
+                    LOGGER.log(Level.SEVERE, PLAYER_NOT_CREATED_YET, e);
+                }
+                //todo: getGameState().getInventory().setInventoryItems(data.getInventoryItems());
                 mouseManager.setUIManager(null);
                 StateManager.getStateManager().setState(gameState);
             }
-        }
-        ));
-        uiManager.addObjectToMenu("loadButton", new UITextButton(width / 2 - 80, 304, 160, 32, Assets.getAssets().imageArrayMap.get("btn_empty"), "LOAD", new ClickListener() 
-        {
-            @Override
-            public void onClick() 
+            catch(Exception e)
             {
-                try
-                {
-                    SaveData data = (SaveData) ResourceManager.load("1.save");
-                    getGameState().getWorld().getPlayer().setHealth(data.getHealth());
-                    getGameState().getWorld().getPlayer().setX(data.getX());
-                    getGameState().getWorld().getPlayer().setY(data.getY());
-                    //getGameState().getInventory().setInventoryItems(data.getInventoryItems());
-                    mouseManager.setUIManager(null);
-                    StateManager.getStateManager().setState(gameState);
-                }
-                catch(Exception e)
-                {
-                    System.out.println("Couldn't load save data: " + e.getMessage());
-                }
+                System.out.println("Couldn't load save data: " + e.getMessage());
             }
         }
         ));
-        uiManager.addObjectToMenu("saveButton", new UITextButton(width / 2 - 80, 352, 160, 32, Assets.getAssets().imageArrayMap.get("btn_empty"), "SAVE", new ClickListener() 
+        uiManager.addObjectToMenu("saveButton", new UITextButton(width / 2 - 80, 352, 160, 32, Assets.getAssets().imageArrayMap.get(BTN_EMPTY), "SAVE", new ClickListener()
         {
             @Override
             public void onClick() 
             {
                 SaveData data = new SaveData();
                 data.setName("player");
-                data.setHealth(getGameState().getWorld().getPlayer().getHealth());
-                data.setX(getGameState().getWorld().getPlayer().getX());
-                data.setY(getGameState().getWorld().getPlayer().getY());
+                try {
+                    data.setHealth(Player.getInstance().getHealth());
+                    data.setX(Player.getInstance().getX());
+                    data.setY(Player.getInstance().getY());
+                } catch (PlayerException e) {
+                    LOGGER.log(Level.SEVERE, PLAYER_NOT_CREATED_YET, e);
+                }
                 //data.setInventoryItems(getGameState().getInventory().getInventoryItems());
                 
                 try
@@ -136,7 +144,7 @@ public class Game implements Runnable
             }
         }
         ));
-        uiManager.addObjectToMenu("optionsButton", new UITextButton(width / 2 - 80, 400, 160, 32, Assets.getAssets().imageArrayMap.get("btn_empty"), "OPTIONS", new ClickListener() 
+        uiManager.addObjectToMenu("optionsButton", new UITextButton(width / 2 - 80, 400, 160, 32, Assets.getAssets().imageArrayMap.get(BTN_EMPTY), "OPTIONS", new ClickListener()
         {
             @Override
             public void onClick() 
@@ -148,7 +156,7 @@ public class Game implements Runnable
         ));
     }
     
-    private void initDisplay()
+    private static void initDisplay()
     {
         display = Display.getInstance();
         display.getFrame().addKeyListener(keyManager);
@@ -158,11 +166,11 @@ public class Game implements Runnable
         display.getCanvas().addMouseMotionListener(mouseManager);
     }
     
-    private void initStates() 
+    private static void initStates()
     {
-        gameState = new GameState(this);
-        menuState = new MenuState(this);
-        optionsState = new OptionsState(this);
+        gameState = new GameState();
+        menuState = new MenuState();
+        optionsState = new OptionsState();
         StateManager.getStateManager().setState(menuState);
     }
 
@@ -186,26 +194,26 @@ public class Game implements Runnable
 
     private void render()
     {
-        bs = display.getCanvas().getBufferStrategy(); //way for computer to draw things to a screen using buffers (buffer is hidden "screen" within computer) or how many buffers it's going to use
-        if(bs == null)
+        BufferStrategy bufferStrategy = display.getCanvas().getBufferStrategy(); //way for computer to draw things to a screen using buffers (buffer is hidden "screen" within computer) or how many buffers it's going to use
+        if(bufferStrategy == null)
         {
             display.getCanvas().createBufferStrategy(3); //create bufferstrategy using 3 buffers
             return;
         }
-        g = bs.getDrawGraphics(); //graphics allows you to draw images to canvas like a paintbrush
+        Graphics graphics = bufferStrategy.getDrawGraphics(); //graphics allows you to draw images to canvas like a paintbrush
         //Clear Screen
-        g.clearRect(0, 0, width, height);
+        graphics.clearRect(0, 0, width, height);
         //Draw Here!
         
         if(StateManager.getStateManager().getState() != null)
         {
-            StateManager.getStateManager().getState().render(g);
-            uiManager.render(g);
+            StateManager.getStateManager().getState().render(graphics);
+            uiManager.render(graphics);
         }
 
         //End Drawing!
-        bs.show();
-        g.dispose();
+        bufferStrategy.show();
+        graphics.dispose();
     }
 
     @Override

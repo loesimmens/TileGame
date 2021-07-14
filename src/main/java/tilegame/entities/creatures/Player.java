@@ -5,12 +5,12 @@
  */
 package tilegame.entities.creatures;
 
-import tilegame.Game;
 import tilegame.dialogue.DialogueBox;
 import tilegame.entities.Direction;
 import tilegame.entities.Entity;
 import tilegame.entities.EntityManager;
-import tilegame.entities.StateMachine;
+import tilegame.entities.State;
+import tilegame.entities.exceptions.PlayerException;
 import tilegame.gfx.GameCamera;
 import tilegame.inventory.InventoryPanel;
 import tilegame.utils.Listener;
@@ -25,31 +25,37 @@ import java.awt.event.KeyEvent;
 public class Player extends Creature implements java.io.Serializable, Listener
 {
     private static Player player;
-    //Attack timer
-    private long lastInteractionTimer, interactionCooldown = 800, interactionTimer = interactionCooldown;
+    private long lastInteractionTimer;
+    private static final long INTERACTION_COOLDOWN = 800;
+    private long interactionTimer;
 
-    private boolean up, down, left, right, interact, attack;
+    private boolean up;
+    private boolean down;
+    private boolean left;
+    private boolean right;
+    private boolean interact;
+    private boolean attack;
         
     private Player(float x, float y)
     {
         super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT, 0, "player");
-        
         facing = Direction.UP;
+        interactionTimer = INTERACTION_COOLDOWN;
     }
 
-    public static Player create(float x, float y){
+    public static Player getInstance(float x, float y){
         if(player == null){
             player = new Player(x, y);
         }
         return player;
     }
 
-    public static Player getInstance(){
+    public static Player getInstance() throws PlayerException {
         if(player != null){
             return player;
         }
         else{
-            throw new RuntimeException("player has not been created yet");
+            throw new PlayerException("player has not been created yet");
         }
     }
 
@@ -72,47 +78,41 @@ public class Player extends Creature implements java.io.Serializable, Listener
     
     private void checkInteractions()
     {
-        if(!(state == StateMachine.ATTACKING || state == StateMachine.INTERACTING))
-            return;
-        interactionTimer += System.currentTimeMillis() - lastInteractionTimer;
-        lastInteractionTimer = System.currentTimeMillis();
-        if(interactionTimer < interactionCooldown)
-            return;
-
-        if(Game.getGameState().getInventoryPanel().isActive())
-            return;
-        
-        Rectangle interactionBounds = setInteractionBounds();
-
-        interactionTimer = 0;
-
-        for(Entity e : EntityManager.getEntities())
-        {
-            if(e.equals(this))
-                continue;
-            if(intersectsWithOtherEntity(interactionBounds, e))
-            {
-                if(state.equals(StateMachine.ATTACKING))
-                {
-                    e.hurt(1);
-                    state = StateMachine.IDLE;
-                }
-                else if(state.equals(StateMachine.INTERACTING))
-                {
-                    if(e.getState() != StateMachine.INTERACTING)
-                    {
-                        e.interact();
-                        DialogueBox.setActive(active);
-                    }
-                    if(!DialogueBox.isActive())
-                    {
-                        e.setState(StateMachine.IDLE);
-                        state = StateMachine.IDLE;
+        if(state == State.ATTACKING || state == State.INTERACTING) {
+            if(enoughTimeBetweenInteractions() && !InventoryPanel.isActive()){
+                Rectangle interactionBounds = setInteractionBounds();
+                interactionTimer = 0;
+                for (Entity e : EntityManager.getAllEntitiesExceptPlayer()) {
+                    if (!e.equals(this)) {
+                        if (intersectsWithOtherEntity(interactionBounds, e)) {
+                            if (state.equals(State.ATTACKING)) {
+                                e.hurt(1);
+                                state = State.IDLE;
+                            } else if (state.equals(State.INTERACTING)) {
+                                if (e.getState() != State.INTERACTING) {
+                                    e.interact();
+                                    DialogueBox.setActive(active);
+                                }
+                                if (!DialogueBox.isActive()) {
+                                    e.setState(State.IDLE);
+                                    state = State.IDLE;
+                                }
+                            }
+                            return;
+                        }
                     }
                 }
-                return;
             }
         }
+    }
+
+    private boolean enoughTimeBetweenInteractions() {
+        interactionTimer += System.currentTimeMillis() - lastInteractionTimer;
+        lastInteractionTimer = System.currentTimeMillis();
+        if (interactionTimer >= INTERACTION_COOLDOWN) {
+            return true;
+        }
+        return false;
     }
 
     private Rectangle setInteractionBounds()
@@ -172,41 +172,41 @@ public class Player extends Creature implements java.io.Serializable, Listener
         
         if(InventoryPanel.isActive())
             return;
-        if(state != StateMachine.INTERACTING){
+        if(state != State.INTERACTING){
             if(up)
             {
-                state = StateMachine.WALKING;
+                state = State.WALKING;
                 facing = Direction.UP;
                 yMove = -speed;
             }
             else if(down)
             {
-                state = StateMachine.WALKING;
+                state = State.WALKING;
                 facing = Direction.DOWN;
                 yMove = speed;
             }
             else if(left)
             {
-                state = StateMachine.WALKING;
+                state = State.WALKING;
                 facing = Direction.LEFT;
                 xMove = -speed;
             }
             else if(right)
             {
-                state = StateMachine.WALKING;
+                state = State.WALKING;
                 facing = Direction.RIGHT;
                 xMove = speed;
             }
             else if(attack)
             {
-                state = StateMachine.ATTACKING;
+                state = State.ATTACKING;
             }
             else if(interact)
             {
-                state = StateMachine.INTERACTING;
+                state = State.INTERACTING;
             }
             else {
-                state = StateMachine.IDLE;
+                state = State.IDLE;
             }
         }
     }

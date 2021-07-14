@@ -17,17 +17,21 @@ import java.awt.*;
 public abstract class Entity 
 {
     public static final int DEFAULT_HEALTH = 3;
-    protected float x, y;
-    protected int width, height;
+    protected float x;
+    protected float y;
+    protected int width;
+    protected int height;
     protected int health;
     protected boolean active = true;
     protected Rectangle bounds;
     
-    protected StateMachine state;
+    protected State state;
     
     protected long id;
     private String name;
     protected Dialogue dialogue;
+
+    public Entity() {}
     
     public Entity(float x, float y, int width, int height, long id, String name)
     {
@@ -39,7 +43,7 @@ public abstract class Entity
         
         bounds = new Rectangle(0, 0, width, height);
         
-        state = StateMachine.IDLE;
+        state = State.IDLE;
         
         this.id = id;
         this.name = name;
@@ -140,11 +144,11 @@ public abstract class Entity
         return active;
     }
 
-    public StateMachine getState() {
+    public State getState() {
         return state;
     }
 
-    public void setState(StateMachine state) 
+    public void setState(State state)
     {
         this.state = state;
     }

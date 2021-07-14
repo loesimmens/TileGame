@@ -5,11 +5,13 @@
  */
 package tilegame.dialogue;
 
+import tilegame.logger.TileGameLogger;
 import tilegame.utils.Listener;
 import tilegame.utils.Utils;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 /**
  * @author Loes Immens
@@ -21,12 +23,14 @@ public class DialogueManager implements java.io.Serializable, Listener
     private HashMap<Long, Dialogue> dialogueMap;
     private DialogueBox dialogueBox;
     private Dialogue currentDialogue;
+    private Logger logger = TileGameLogger.getLogger();
 
     private DialogueManager(){
         dialogueMap = new HashMap<>();
         dialogueBox = DialogueBox.getInstance();
         loadDialogues("res/dialogues/dialogues.txt");
         currentDialogue = null;
+        logger.info("DialogueManager created");
     }
 
     //todo: Files.readAllLines(Path p) of Files.lines(Path p)
@@ -71,27 +75,22 @@ public class DialogueManager implements java.io.Serializable, Listener
                     }
                 }
             }
-            if(dialogue != null)
-            {
-                dialogueMap.put(creatureID, dialogue);
-                dialogue.setCurrentNode(1);
-            }
+            dialogueMap.put(creatureID, dialogue);
+            dialogue.setCurrentNode(1);
         }
     }
     
     public void tick()
     {
-        if(!dialogueBox.isActive())
-            return;
-        dialogueBox.tick();
+        if(dialogueBox.isActive())
+            dialogueBox.tick();
     }
             
     
     public void render(Graphics g)
     {
-        if(!dialogueBox.isActive())
-            return;
-        dialogueBox.render(g);
+        if(dialogueBox.isActive())
+            dialogueBox.render(g);
     }
     
     @Override

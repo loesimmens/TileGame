@@ -5,11 +5,11 @@
  */
 package tilegame.entities.creatures;
 
-import tilegame.Game;
-import tilegame.entities.StateMachine;
+import tilegame.entities.State;
 import tilegame.entities.attributes.Talking;
 import tilegame.entities.staticEntities.StaticEntity;
 import tilegame.gfx.Assets;
+import tilegame.gfx.GameCamera;
 
 import java.awt.*;
 
@@ -31,11 +31,11 @@ public class Cat extends StaticEntity implements Talking
     public void render(Graphics g)
     {
         if(id == 3)
-            g.drawImage(Assets.getAssets().imageMap.get("cat1"), (int) (x - Game.getGameState().getGame().getGameCamera().getxOffset()),
-                (int) (y - Game.getGameState().getGame().getGameCamera().getyOffset()), width, height, null);
+            g.drawImage(Assets.getAssets().imageMap.get("cat1"), (int) (x - GameCamera.getxOffset()),
+                (int) (y - GameCamera.getyOffset()), width, height, null);
         else if(id == 4)
-            g.drawImage(Assets.getAssets().imageMap.get("cat2"), (int) (x - Game.getGameState().getGame().getGameCamera().getxOffset()),
-                (int) (y - Game.getGameState().getGame().getGameCamera().getyOffset()), width, height, null);
+            g.drawImage(Assets.getAssets().imageMap.get("cat2"), (int) (x - GameCamera.getxOffset()),
+                (int) (y - GameCamera.getyOffset()), width, height, null);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class Cat extends StaticEntity implements Talking
     @Override
     public void interact() 
     {
-        state = StateMachine.INTERACTING;
+        state = State.INTERACTING;
         talk(id);
     }
 

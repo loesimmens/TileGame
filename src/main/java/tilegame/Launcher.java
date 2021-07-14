@@ -11,7 +11,6 @@ package tilegame;
  */
 public class Launcher 
 {
-
     /**
      * @param args the command line arguments
      */
@@ -20,5 +19,4 @@ public class Launcher
         Game.getInstance().init(640, 480);
         Game.getInstance().start();
     }
-    
 }

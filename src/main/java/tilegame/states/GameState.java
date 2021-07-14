@@ -5,7 +5,6 @@
  */
 package tilegame.states;
 
-import tilegame.Game;
 import tilegame.inventory.Inventory;
 import tilegame.inventory.InventoryPanel;
 import tilegame.worlds.World;
@@ -17,20 +16,14 @@ import java.awt.*;
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public class GameState extends State
-{
+public class GameState implements State {
     private World world;
-    
-    //Inventory
     private Inventory inventory;
     private InventoryPanel inventoryPanel;
     
-    public GameState(Game game)
+    public GameState()
     {
-        super(game);
         world = WorldLoader.loadWorld(this, "res/worlds/houseInside.txt");
-        
-        //Inventory
         inventory = Inventory.getInstance();
         inventoryPanel = InventoryPanel.getInstance();
     }
@@ -48,25 +41,5 @@ public class GameState extends State
     {
         world.render(g);
         inventoryPanel.render(g);
-    }
-
-    public Game getGame() 
-    {
-        return game;
-    }
-
-    public World getWorld() 
-    {
-        return world;
-    }
-
-    public Inventory getInventory() 
-    {
-        return inventory;
-    }
-
-    public InventoryPanel getInventoryPanel() 
-    {
-        return inventoryPanel;
     }
 }
