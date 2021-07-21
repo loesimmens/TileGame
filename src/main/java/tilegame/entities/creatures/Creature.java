@@ -149,14 +149,12 @@ public abstract class Creature extends Entity implements Ticking, Rendering
     {
         if(movingUp())
         {
-            LOGGER.info(this + " tries to move up");
             int outerYOfBoundsAfterMoving = (int) (yLocation + yMove + bounds.y);
             int nTilesVerticalLocationAfterMoving = outerYOfBoundsAfterMoving / Tile.TILEHEIGHT;
             
             if(tilePassable((int) (xLocation + bounds.x) / Tile.TILEWIDTH, nTilesVerticalLocationAfterMoving) &&
                     tilePassable((int) (xLocation + bounds.x + bounds.width) / Tile.TILEWIDTH, nTilesVerticalLocationAfterMoving)) {
                 yLocation += yMove;
-                LOGGER.info(this + " moves up");
             }
             else {
                 yLocation = outerYOfBoundsAfterMoving + Tile.TILEHEIGHT - bounds.y;
