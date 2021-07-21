@@ -16,36 +16,28 @@ import tilegame.worlds.World;
  */
 public class GameCamera 
 {
-    private static float xOffset, yOffset;
-    private static final GameCamera gameCamera = new GameCamera();
+    private static float xOffset = 0;
+    private static float yOffset = 0;
     
-    private GameCamera()
-    {
-        xOffset = 0;
-        yOffset = 0;
-    }
-
-    public static final GameCamera getInstance(){
-        return gameCamera;
-    }
+    private GameCamera() {}
     
-    public void clamCameraBounds()
+    private static void clamCameraBoundsWithinWorldBorders()
     {
         if(xOffset < 0)
             xOffset = 0;
-        else if(xOffset > World.getWidth() * Tile.TILEWIDTH - Game.getWidth())
-            xOffset = World.getWidth() * Tile.TILEWIDTH - Game.getWidth();
+        else if(xOffset > World.getWidthInNTiles() * Tile.TILEWIDTH - Game.getDisplayWidth())
+            xOffset = World.getWidthInNTiles() * Tile.TILEWIDTH - Game.getDisplayWidth();
         if(yOffset < 0)
             yOffset = 0;
-        else if(yOffset > World.getHeight() * Tile.TILEHEIGHT - Game.getHeight())
-            yOffset = World.getHeight() * Tile.TILEHEIGHT - Game.getHeight();
+        else if(yOffset > World.getHeightInNTiles() * Tile.TILEHEIGHT - Game.getDisplayHeight())
+            yOffset = World.getHeightInNTiles() * Tile.TILEHEIGHT - Game.getDisplayHeight();
     }
     
-    public void centerOnEntity(Entity e)
+    public static void centerOnEntity(Entity e)
     {
-        xOffset = e.getX() - Game.getWidth() / 2 + e.getWidth() / 2;
-        yOffset = e.getY() - Game.getHeight() / 2 + e.getHeight() / 2;
-        clamCameraBounds();
+        xOffset = e.getxLocation() + e.getWidth() / 2 - Game.getDisplayWidth() / 2;
+        yOffset = e.getyLocation() + e.getHeight() / 2 - Game.getDisplayHeight() / 2;
+        clamCameraBoundsWithinWorldBorders();
     }
 
     public static float getxOffset()

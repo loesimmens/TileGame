@@ -9,20 +9,22 @@ import tilegame.dialogue.DialogueBox;
 import tilegame.entities.Direction;
 import tilegame.entities.Entity;
 import tilegame.entities.EntityManager;
-import tilegame.entities.State;
+import tilegame.entities.EntityState;
 import tilegame.entities.exceptions.PlayerException;
 import tilegame.gfx.GameCamera;
 import tilegame.inventory.InventoryPanel;
+import tilegame.logger.TileGameLogger;
 import tilegame.utils.Listener;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.logging.Logger;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public class Player extends Creature implements java.io.Serializable, Listener
+public class Player extends Creature implements Listener
 {
     private static Player player;
     private long lastInteractionTimer;
@@ -35,6 +37,8 @@ public class Player extends Creature implements java.io.Serializable, Listener
     private boolean right;
     private boolean interact;
     private boolean attack;
+
+    private static final Logger LOGGER = TileGameLogger.getLogger();
         
     private Player(float x, float y)
     {
@@ -62,64 +66,141 @@ public class Player extends Creature implements java.io.Serializable, Listener
     @Override
     public void tick() 
     {
-        //Animations
-        animDown.tick();
-        animUp.tick();
-        animLeft.tick();
-        animRight.tick();
-        
-        //Movement
+        tickAnimations();
         getInput();
         move();
-        GameCamera.getInstance().centerOnEntity(this);
+        GameCamera.centerOnEntity(this);
 
-        checkInteractions();
+        if(timeToAttackOrInteract()){
+            attackOrInteract();
+        }
     }
-    
-    private void checkInteractions()
-    {
-        if(state == State.ATTACKING || state == State.INTERACTING) {
-            if(enoughTimeBetweenInteractions() && !InventoryPanel.isActive()){
-                Rectangle interactionBounds = setInteractionBounds();
-                interactionTimer = 0;
-                for (Entity e : EntityManager.getAllEntitiesExceptPlayer()) {
-                    if (!e.equals(this)) {
-                        if (intersectsWithOtherEntity(interactionBounds, e)) {
-                            if (state.equals(State.ATTACKING)) {
-                                e.hurt(1);
-                                state = State.IDLE;
-                            } else if (state.equals(State.INTERACTING)) {
-                                if (e.getState() != State.INTERACTING) {
-                                    e.interact();
-                                    DialogueBox.setActive(active);
-                                }
-                                if (!DialogueBox.isActive()) {
-                                    e.setState(State.IDLE);
-                                    state = State.IDLE;
-                                }
-                            }
-                            return;
-                        }
+
+    private void getInput() {
+        xMove = 0;
+        yMove = 0;
+
+        if(!InventoryPanel.isActive() && entityState != EntityState.INTERACTING) {
+            if(up) {
+                entityState = EntityState.WALKING;
+                facing = Direction.UP;
+                yMove = -speed;
+                LOGGER.info("Player is moving " + facing + -yMove);
+            }
+            else if(down) {
+                entityState = EntityState.WALKING;
+                facing = Direction.DOWN;
+                yMove = speed;
+            }
+            else if(left) {
+                entityState = EntityState.WALKING;
+                facing = Direction.LEFT;
+                xMove = -speed;
+            }
+            else if(right) {
+                entityState = EntityState.WALKING;
+                facing = Direction.RIGHT;
+                xMove = speed;
+            }
+            else if(attack) {
+                entityState = EntityState.ATTACKING;
+            }
+            else if(interact) {
+                entityState = EntityState.INTERACTING;
+            }
+            else {
+                beIdle();
+            }
+        }
+    }
+
+    @Override
+    public void interact(){
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void update(Object o) {
+        if(o instanceof Integer){
+            Integer keyCode = (Integer)o;
+            switch(keyCode){
+                case KeyEvent.VK_W: up = true;
+                    LOGGER.info("Player hears that key UP has been pressed");
+                    break;
+                case KeyEvent.VK_S: down = true; break;
+                case KeyEvent.VK_A: left = true; break;
+                case KeyEvent.VK_D: right = true; break;
+                case KeyEvent.VK_E: interact = true; break;
+                case KeyEvent.VK_X: attack = true; break;
+                case -1: {
+                    up = false;
+                    down = false;
+                    left = false;
+                    right = false;
+                    interact = false;
+                    attack = false;
+                    LOGGER.info("Player hears that a previously pressed key has been released");
+                    break;
+                }
+                default: break;
+            }
+        }
+        else
+            throw new IllegalArgumentException("player input is no integer!");
+    }
+
+    private void attackOrInteract() {
+        Rectangle interactionBounds = setInteractionBounds();
+        interactionTimer = 0;
+        for(Entity e : EntityManager.getAllEntitiesExceptPlayer()) {
+            if(intersectsWithOtherEntity(interactionBounds, e)) {
+                if(isAttacking()) {
+                    attack(e);
+                } else if(isInteracting()) {
+                    if(!isInteracting(e)) {
+                        interactWith(e);
+                    }
+                    if(!DialogueBox.isActive()) {
+                        setIdle(e);
+                        beIdle();
                     }
                 }
             }
         }
     }
 
+    private boolean timeToAttackOrInteract(){
+        return (isAttacking() || isInteracting())
+                && enoughTimeBetweenInteractions() && !InventoryPanel.isActive();
+    }
+
+    private boolean isAttacking() {
+        return entityState == EntityState.ATTACKING;
+    }
+
+    private boolean isInteracting() {
+        return entityState == EntityState.INTERACTING;
+    }
+
+    private boolean isInteracting(Entity e) {
+        return e.getState() == EntityState.INTERACTING;
+    }
+
+    private void setIdle(Entity e) {
+        e.setState(EntityState.IDLE);
+    }
+
     private boolean enoughTimeBetweenInteractions() {
         interactionTimer += System.currentTimeMillis() - lastInteractionTimer;
         lastInteractionTimer = System.currentTimeMillis();
-        if (interactionTimer >= INTERACTION_COOLDOWN) {
-            return true;
-        }
-        return false;
+        return (interactionTimer >= INTERACTION_COOLDOWN);
     }
 
     private Rectangle setInteractionBounds()
     {
         Rectangle collisionBounds = getCollisionBounds(0,0);
-        Rectangle interactionBounds = new Rectangle();
-        int arSize = 20;
+        var interactionBounds = new Rectangle();
+        var arSize = 20;
         interactionBounds.width = arSize;
         interactionBounds.height = arSize;
 
@@ -159,86 +240,16 @@ public class Player extends Creature implements java.io.Serializable, Listener
         return e.getCollisionBounds(0, 0).intersects(interactionBounds);
     }
 
+    private void interactWith(Entity e) {
+        e.interact();
+        if(e.getDialogue() != null) {
+            DialogueBox.setActive(active);
+        }
+    }
+
     @Override
     public void die() 
     {
-        System.out.println("You lose");
-    }
-    
-    private void getInput()
-    {
-        xMove = 0;
-        yMove = 0;
-        
-        if(InventoryPanel.isActive())
-            return;
-        if(state != State.INTERACTING){
-            if(up)
-            {
-                state = State.WALKING;
-                facing = Direction.UP;
-                yMove = -speed;
-            }
-            else if(down)
-            {
-                state = State.WALKING;
-                facing = Direction.DOWN;
-                yMove = speed;
-            }
-            else if(left)
-            {
-                state = State.WALKING;
-                facing = Direction.LEFT;
-                xMove = -speed;
-            }
-            else if(right)
-            {
-                state = State.WALKING;
-                facing = Direction.RIGHT;
-                xMove = speed;
-            }
-            else if(attack)
-            {
-                state = State.ATTACKING;
-            }
-            else if(interact)
-            {
-                state = State.INTERACTING;
-            }
-            else {
-                state = State.IDLE;
-            }
-        }
-    }
-
-    @Override
-    public void interact(){}
-
-
-    @Override
-    public void update(Object o) {
-        if(o instanceof Integer){
-            Integer keyCode = (Integer)o;
-            switch(keyCode){
-                case KeyEvent.VK_W: up = true; break;
-                case KeyEvent.VK_S: down = true; break;
-                case KeyEvent.VK_A: left = true; break;
-                case KeyEvent.VK_D: right = true; break;
-                case KeyEvent.VK_E: interact = true; break;
-                case KeyEvent.VK_X: attack = true; break;
-                case -1: {
-                    up = false;
-                    down = false;
-                    left = false;
-                    right = false;
-                    interact = false;
-                    attack = false;
-                    break;
-                }
-                default: break;
-            }
-        }
-        else
-            throw new IllegalArgumentException("player input is no integer!");
+        LOGGER.info("Player has died!");
     }
 }

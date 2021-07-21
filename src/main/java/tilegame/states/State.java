@@ -5,14 +5,13 @@
  */
 package tilegame.states;
 
-import java.awt.*;
+import tilegame.game_elements.Rendering;
+import tilegame.game_elements.Ticking;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public interface State
+public interface State extends Ticking, Rendering
 {
-    void tick();
-    void render(Graphics g);
 }

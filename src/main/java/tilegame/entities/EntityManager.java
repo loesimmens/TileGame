@@ -7,46 +7,34 @@ package tilegame.entities;
 
 import tilegame.dialogue.DialogueManager;
 import tilegame.entities.creatures.Player;
+import tilegame.game_elements.Rendering;
+import tilegame.game_elements.Ticking;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public class EntityManager implements java.io.Serializable
+public class EntityManager implements java.io.Serializable, Ticking, Rendering
 {
     private static final EntityManager entityManager = new EntityManager();
-    private DialogueManager dialogueManager;
-    private static ArrayList<Entity> entities;
-    private static ArrayList<Entity> allEntitiesExceptPlayer;
-    private Comparator<Entity> renderSorter = new Comparator<Entity>()
-    {
-        @Override
-        public int compare(Entity a, Entity b) 
-        {
-            if(a.getY() + a.height < b.getY() + b.height)
-                return -1;
-            else
-                return 1;
-        }
-    };
+    private final DialogueManager dialogueManager = DialogueManager.getInstance();
+    private static List<Entity> entities = new ArrayList<>();
+    private static List<Entity> allEntitiesExceptPlayer = new ArrayList<>();
+    private final transient Comparator<Entity> entityComparator = (a, b) -> Float.compare(a.getyLocation() + a.height, b.getyLocation() + b.height);
     
-    private EntityManager()
-    {
-        dialogueManager = DialogueManager.getInstance();
-        
-        entities = new ArrayList<>();
-        allEntitiesExceptPlayer = new ArrayList<>();
-    }
+    private EntityManager() {}
 
-    public static final EntityManager getInstance(){
+    public static EntityManager getInstance(){
         return entityManager;
     }
-    
+
+    @Override
     public void tick()
     {
         Iterator<Entity> it = entities.iterator();
@@ -57,10 +45,11 @@ public class EntityManager implements java.io.Serializable
             if(!e.isActive())
                 it.remove();
         }
-        entities.sort(renderSorter);
+        entities.sort(entityComparator);
         dialogueManager.tick();
     }
-    
+
+    @Override
     public void render(Graphics g)
     {
         for(Entity e : entities)
@@ -84,16 +73,12 @@ public class EntityManager implements java.io.Serializable
         return "entity manager";
     }
 
-    public static ArrayList<Entity> getEntities()
+    public static List<Entity> getEntities()
     {
         return entities;
     }
 
-    public static ArrayList<Entity> getAllEntitiesExceptPlayer() {
+    public static List<Entity> getAllEntitiesExceptPlayer() {
         return allEntitiesExceptPlayer;
-    }
-
-    public DialogueManager getDialogueManager() {
-        return dialogueManager;
     }
 }

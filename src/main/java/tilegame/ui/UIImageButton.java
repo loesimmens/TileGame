@@ -25,9 +25,6 @@ public class UIImageButton extends UIObject
     }
 
     @Override
-    public void tick() { }
-
-    @Override
     public void render(Graphics g) 
     {
         if(hovering)

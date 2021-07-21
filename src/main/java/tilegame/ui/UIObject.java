@@ -5,22 +5,25 @@
  */
 package tilegame.ui;
 
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import tilegame.game_elements.Rendering;
+
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public abstract class UIObject 
+public abstract class UIObject implements Rendering
 {
-    protected float x, y;
-    protected int width, height;
+    protected float x;
+    protected float y;
+    protected int width;
+    protected int height;
     protected Rectangle bounds;
     protected boolean hovering = false;
     
-    public UIObject(float x, float y, int width, int height)
+    protected UIObject(float x, float y, int width, int height)
     {
         this.x = x;
         this.y = y;
@@ -29,27 +32,18 @@ public abstract class UIObject
         bounds = new Rectangle((int) x, (int) y, width, height);
     }
     
-    public abstract void tick();
-    
-    public abstract void render(Graphics g);
-    
     public abstract void onClick();
     
     public void onMouseMove(MouseEvent e)
     {
-        if(bounds.contains(e.getX(), e.getY()))
-            hovering = true;
-        else
-            hovering = false;
+        hovering = bounds.contains(e.getX(), e.getY());
     }
     
-    public void OnMouseRelease(MouseEvent e)
+    public void onMouseRelease(MouseEvent e)
     {
         if(hovering)
             onClick();
     }
-
-    //GETTERS SETTERS
     
     public float getX() 
     {
@@ -89,15 +83,5 @@ public abstract class UIObject
     public void setHeight(int height) 
     {
         this.height = height;
-    }
-
-    public boolean isHovering() 
-    {
-        return hovering;
-    }
-
-    public void setHovering(boolean hovering) 
-    {
-        this.hovering = hovering;
     }
 }

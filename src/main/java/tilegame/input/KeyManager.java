@@ -5,6 +5,8 @@
  */
 package tilegame.input;
 
+import tilegame.game_elements.Ticking;
+import tilegame.logger.TileGameLogger;
 import tilegame.utils.Listener;
 
 import java.awt.event.KeyEvent;
@@ -12,19 +14,29 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public class KeyManager implements KeyListener
+public class KeyManager implements KeyListener, Ticking
 {
     private static final KeyManager keyManager = new KeyManager();
-    private boolean[] keys, justPressed, cantPress;
-    public boolean up, down, left, right,
-        interact, attack,
-            one, two;
-    private static HashMap<Integer, List<Listener>> listeners = new HashMap<>();
+    private final boolean[] keys;
+    private final boolean[] justPressed;
+    private final boolean[] cantPress;
+    private boolean up;
+    private boolean down;
+    private boolean left;
+    private boolean right;
+    private boolean interact;
+    private boolean attack;
+    private boolean one;
+    private boolean two;
+
+    private static final HashMap<Integer, List<Listener>> LISTENERS = new HashMap<>();
+    private static final Logger LOGGER = TileGameLogger.getLogger();
     
     private KeyManager()
     {
@@ -33,32 +45,34 @@ public class KeyManager implements KeyListener
         cantPress = new boolean[keys.length];
     }
 
-    public static final KeyManager getInstance(){
+    public static KeyManager getInstance(){
         return keyManager;
     }
-    
-    public void tick()
-    {
-        for(int i = 0; i < keys.length; i++)
-        {
-            if(pressedThenReleased(i))
-            {
+
+    @Override
+    public void tick() {
+        for(var i = 0; i < keys.length; i++) {
+            if(pressedThenReleased(i)) {
                 cantPress[i] = false;
                 notify(-1);
+                LOGGER.info("Notify all listeners that key " + i + " has just been released");
             }
-            else if(justPressed[i])
-            {
+            else if(justPressed[i]) {
                 cantPress[i] = true;
                 justPressed[i] = false;
+                LOGGER.info("Can't press key " + i + " again, because it has just been pressed");
             }
-            if(!cantPress[i] && keys[i])
-            {
+            if(!cantPress[i] && keys[i]) {
                 justPressed[i] = true;
                 notify(i);
+                LOGGER.info("Notify all listeners that key " + i + " has just been pressed");
             }
         }
 
         up = keys[KeyEvent.VK_W];
+        if(up) {
+            LOGGER.info("UP has been pressed");
+        }
         down = keys[KeyEvent.VK_S];
         left = keys[KeyEvent.VK_A];
         right = keys[KeyEvent.VK_D];
@@ -84,38 +98,103 @@ public class KeyManager implements KeyListener
     @Override
     public void keyPressed(KeyEvent e) 
     {
-        if(e.getKeyCode() < 0 || e.getKeyCode() > keys.length)
-            return;
-        keys[e.getKeyCode()] = true;
+        if(!(e.getKeyCode() < 0 || e.getKeyCode() > keys.length)) {
+            keys[e.getKeyCode()] = true;
+            LOGGER.info("Key pressed: " + e.getKeyCode());
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) 
     {
-        if(e.getKeyCode() < 0 || e.getKeyCode() > keys.length)
-            return;
-        keys[e.getKeyCode()] = false;
+        if(!(e.getKeyCode() < 0 || e.getKeyCode() > keys.length)) {
+            keys[e.getKeyCode()] = false;
+            LOGGER.info("Key released: " + e.getKeyCode());
+        }
     }
     
     @Override
-    public void keyTyped(KeyEvent e){}
+    public void keyTyped(KeyEvent e) {
+        throw new UnsupportedOperationException();
+    }
 
-    public static void subscribe(Listener listener, List<Integer> keys){
-
-        for(Integer key : keys){
-            if(!listeners.containsKey(key)) {
-                listeners.put(key, new ArrayList<>());
-            }
-            listeners.get(key).add(listener);
+    public static void subscribe(Listener listener, List<Integer> keys) {
+        for(Integer key : keys) {
+            LISTENERS.computeIfAbsent(key, k -> new ArrayList<>());
+            LISTENERS.get(key).add(listener);
+            LOGGER.info("Listener " + listener + " has subscribed to key " + key);
         }
     }
 
-    //todo: eerst player, dan dialogueBox
-    public void notify(Integer keyCode){
-        if(listeners.containsKey(keyCode)){
-            for(Listener listener: listeners.get(keyCode)){
+    public void notify(Integer keyCode) {
+        if(LISTENERS.containsKey(keyCode)){
+            for(Listener listener: LISTENERS.get(keyCode)){
                 listener.update(keyCode);
             }
         }
+    }
+
+    public boolean isUp() {
+        return up;
+    }
+
+    public void setUp(boolean up) {
+        this.up = up;
+    }
+
+    public boolean isDown() {
+        return down;
+    }
+
+    public void setDown(boolean down) {
+        this.down = down;
+    }
+
+    public boolean isLeft() {
+        return left;
+    }
+
+    public void setLeft(boolean left) {
+        this.left = left;
+    }
+
+    public boolean isRight() {
+        return right;
+    }
+
+    public void setRight(boolean right) {
+        this.right = right;
+    }
+
+    public boolean isInteract() {
+        return interact;
+    }
+
+    public void setInteract(boolean interact) {
+        this.interact = interact;
+    }
+
+    public boolean isAttack() {
+        return attack;
+    }
+
+    public void setAttack(boolean attack) {
+        this.attack = attack;
+    }
+
+    public boolean isOne() {
+        return one;
+    }
+
+    public void setOne(boolean one) {
+        this.one = one;
+    }
+
+    public boolean isTwo() {
+        return two;
+    }
+
+    public void setTwo(boolean two) {
+        this.two = two;
     }
 }

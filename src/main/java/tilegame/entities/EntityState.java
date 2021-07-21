@@ -9,7 +9,7 @@ package tilegame.entities;
  *
  * @author Loes Immens
  */
-public enum State
+public enum EntityState
 {
     IDLE,
     WALKING,

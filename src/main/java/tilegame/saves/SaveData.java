@@ -5,11 +5,12 @@
  */
 package tilegame.saves;
 
-import java.util.ArrayList;
 import tilegame.items.Item;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author Loes Immens, based on Almas Baimagambetov's Java Serialization (Save/Load data) video:
  * https://www.youtube.com/watch?v=-xW0pBZqpjU
  */
@@ -19,10 +20,9 @@ public class SaveData implements java.io.Serializable
     
     private String name;
     private int health;
-    private float x, y;
-    private ArrayList<Item> inventoryItems;
-    
-    //GETTERS SETTERS
+    private float x;
+    private float y;
+    private List<Item> inventoryItems;
 
     public String getName() 
     {
@@ -64,15 +64,8 @@ public class SaveData implements java.io.Serializable
         this.y = y;
     }
 
-    public ArrayList<Item> getInventoryItems() 
+    public List<Item> getInventoryItems()
     {
         return inventoryItems;
     }
-
-    public void setInventoryItems(ArrayList<Item> inventoryItems) 
-    {
-        this.inventoryItems = inventoryItems;
-    }
-    
-    
 }

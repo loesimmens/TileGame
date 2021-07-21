@@ -5,7 +5,6 @@
  */
 package tilegame.states;
 
-import tilegame.inventory.Inventory;
 import tilegame.inventory.InventoryPanel;
 import tilegame.worlds.World;
 import tilegame.worlds.WorldLoader;
@@ -17,28 +16,23 @@ import java.awt.*;
  * expanded on by Loes Immens
  */
 public class GameState implements State {
-    private World world;
-    private Inventory inventory;
-    private InventoryPanel inventoryPanel;
+    private final InventoryPanel inventoryPanel;
+    private final World world;
     
-    public GameState()
-    {
-        world = WorldLoader.loadWorld(this, "res/worlds/houseInside.txt");
-        inventory = Inventory.getInstance();
+    public GameState() {
+        WorldLoader.loadWorld("res/worlds/houseInside.txt");
         inventoryPanel = InventoryPanel.getInstance();
+        world = World.getInstance();
     }
 
     @Override
-    public void tick() 
-    {
+    public void tick() {
         world.tick();
-        inventory.tick();
         inventoryPanel.tick();
     }
 
     @Override
-    public void render(Graphics g) 
-    {
+    public void render(Graphics g) {
         world.render(g);
         inventoryPanel.render(g);
     }

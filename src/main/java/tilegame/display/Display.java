@@ -20,12 +20,12 @@ public class Display
     private static final JFrame frame;
     private static final Canvas canvas;
     
-    private static final String title = "Tile Game!";
-    private static final int WIDTH = Game.getWidth();
-    private static final int HEIGHT = Game.getHeight();
+    private static final String TITLE = "Tile Game!";
+    private static final int WIDTH = Game.getDisplayWidth();
+    private static final int HEIGHT = Game.getDisplayHeight();
 
     static {
-        frame = new JFrame(title);
+        frame = new JFrame(TITLE);
         frame.setSize(WIDTH, HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);

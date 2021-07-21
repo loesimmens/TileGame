@@ -5,10 +5,11 @@
  */
 package tilegame.input;
 
+import tilegame.ui.UIManager;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import tilegame.ui.UIManager;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
@@ -20,40 +21,11 @@ public class MouseManager implements MouseListener, MouseMotionListener
     private int mouseX, mouseY;
     private UIManager uiManager;
     
-    public MouseManager()
-    {
-        
-    }
-    
     public void setUIManager(UIManager uiManager)
     {
         this.uiManager = uiManager;
     }
-    
-    //Getters
-    
-    public boolean isLeftPressed()
-    {
-        return leftPressed;
-    }
-    
-    public boolean isRightPressed()
-    {
-        return rightPressed;
-    }
-    
-    public int getMouseX()
-    {
-        return mouseX;
-    }
-    
-    public int getMouseY()
-    {
-        return mouseY;
-    }
-    
-    //Implemented methods
-    
+
     @Override
     public void mousePressed(MouseEvent e) 
     {
@@ -108,7 +80,4 @@ public class MouseManager implements MouseListener, MouseMotionListener
     {
         
     }
-
-    
-    
 }

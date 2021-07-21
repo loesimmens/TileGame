@@ -5,6 +5,9 @@
  */
 package tilegame.items;
 
+import tilegame.game_elements.Rendering;
+import tilegame.game_elements.Ticking;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,9 +16,9 @@ import java.util.Iterator;
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public class ItemManager implements java.io.Serializable
+public class ItemManager implements java.io.Serializable, Ticking, Rendering
 {
-    private static final ItemManager itemManager = ItemManager.getInstance();
+    private static final ItemManager itemManager = new ItemManager();
     private static ArrayList<Item> items = new ArrayList<>();
     
     private ItemManager() {}
@@ -23,8 +26,9 @@ public class ItemManager implements java.io.Serializable
     public static ItemManager getInstance(){
         return itemManager;
     }
-    
-    public static void tick()
+
+    @Override
+    public void tick()
     {
         if(!items.isEmpty()){
             Iterator<Item> it = items.iterator();
@@ -37,8 +41,9 @@ public class ItemManager implements java.io.Serializable
             }
         }
     }
-    
-    public static void render(Graphics g)
+
+    @Override
+    public void render(Graphics g)
     {
         for(Item i : items)
             i.render(g);

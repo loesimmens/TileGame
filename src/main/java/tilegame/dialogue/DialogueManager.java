@@ -5,6 +5,8 @@
  */
 package tilegame.dialogue;
 
+import tilegame.game_elements.Rendering;
+import tilegame.game_elements.Ticking;
 import tilegame.logger.TileGameLogger;
 import tilegame.utils.Listener;
 import tilegame.utils.Utils;
@@ -17,78 +19,83 @@ import java.util.logging.Logger;
  * @author Loes Immens
  * todo: singleton, static methods, in interface Talking
  */
-public class DialogueManager implements java.io.Serializable, Listener
+public class DialogueManager implements Listener, Ticking, Rendering
 {
     private static final DialogueManager dialogueManager = new DialogueManager();
-    private HashMap<Long, Dialogue> dialogueMap;
-    private DialogueBox dialogueBox;
+    private final HashMap<Long, Dialogue> dialogueMap;
+    private final DialogueBox dialogueBox;
     private Dialogue currentDialogue;
-    private Logger logger = TileGameLogger.getLogger();
+    private int lineCounter;
+
+    private static final String CREATURE = "creature";
+    private static final Logger LOGGER = TileGameLogger.getLogger();
 
     private DialogueManager(){
         dialogueMap = new HashMap<>();
         dialogueBox = DialogueBox.getInstance();
         loadDialogues("res/dialogues/dialogues.txt");
         currentDialogue = null;
-        logger.info("DialogueManager created");
     }
 
-    //todo: Files.readAllLines(Path p) of Files.lines(Path p)
     public void loadDialogues(String path)
     {
-        String file = Utils.loadFileAsString(path);
-        String[] tokens = file.split("\\r?\\n");
-        
-        int counter = 0;
-        while(counter < tokens.length - 4 && tokens[counter].equals("creature"))
+        String stringFromFile = Utils.loadFileAsString(path);
+        String[] lines = stringFromFile.split("\\r?\\n");
+
+        while(lineCounter < lines.length - 4 && lines[lineCounter].equals(CREATURE))
         {
-            counter += 1;
-            long creatureID = Long.parseLong(tokens[counter]);
-            int nNodes = Utils.parseInt(tokens[counter + 1]);
-            Dialogue dialogue = new Dialogue(creatureID, nNodes);
-            counter += 2;
-            while(counter < tokens.length - 2 && !tokens[counter].equals("creature")) //create dialogueNodes with dialogueOptions
-            {
-                if(tokens[counter].equals("node"))
-                {
-                    int id = Utils.parseInt(tokens[counter + 1]);
-                    String text = tokens[counter + 2];
-
-                    if(id == 0  || text == null)
-                        return;
-
-                    DialogueNode node = new DialogueNode(id, text);
-                    dialogue.addNode(node);
-
-                    counter += 3;
-                    String optionText;
-                    int optionDestination;
-                    int optionCounter = 1;
-
-                    while(counter < tokens.length - 1 && !tokens[counter].equals("node")&& !tokens[counter].equals("creature"))
-                    {
-                        optionText = tokens[counter];
-                        optionDestination = Utils.parseInt(tokens[counter + 1]);
-                        dialogue.addOption(optionCounter, optionText, node, optionDestination);
-                        optionCounter++;
-                        counter += 2;
-                    }
-                }
-            }
+            lineCounter += 1;
+            var creatureID = Long.parseLong(lines[lineCounter]);
+            var dialogue = createDialogue(lines, creatureID);
             dialogueMap.put(creatureID, dialogue);
             dialogue.setCurrentNode(1);
         }
     }
-    
-    public void tick()
-    {
+
+    private Dialogue createDialogue(String[] lines, long creatureID) {
+        var nNodes = Integer.parseInt(lines[lineCounter + 1]);
+        var dialogue = new Dialogue(creatureID, nNodes);
+        lineCounter += 2;
+        createDialogueNodes(lines, dialogue);
+        return dialogue;
+    }
+
+    private void createDialogueNodes(String[] lines, Dialogue dialogue) {
+        while(lineCounter < lines.length - 2 && !lines[lineCounter].equals(CREATURE)) //create dialogueNodes with dialogueOptions
+        {
+            if(lines[lineCounter].equals("node"))
+            {
+                var id = Integer.parseInt(lines[lineCounter + 1]);
+                String text = lines[lineCounter + 2];
+
+                var node = new DialogueNode(id, text);
+                dialogue.addNode(node);
+
+                lineCounter += 3;
+                String optionText;
+                int optionDestination;
+                var optionCounter = 1;
+
+                while(lineCounter < lines.length - 1 && !lines[lineCounter].equals("node")&& !lines[lineCounter].equals(CREATURE))
+                {
+                    optionText = lines[lineCounter];
+                    optionDestination = Integer.parseInt(lines[lineCounter + 1]);
+                    dialogue.addOption(optionCounter, optionText, node, optionDestination);
+                    optionCounter++;
+                    lineCounter += 2;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void tick() {
         if(dialogueBox.isActive())
             dialogueBox.tick();
     }
             
-    
-    public void render(Graphics g)
-    {
+    @Override
+    public void render(Graphics g) {
         if(dialogueBox.isActive())
             dialogueBox.render(g);
     }
@@ -97,11 +104,6 @@ public class DialogueManager implements java.io.Serializable, Listener
     public String toString()
     {
         return "dialogue manager";
-    }
-
-    public DialogueBox getDialogueBox() 
-    {
-        return dialogueBox;
     }
 
     @Override
