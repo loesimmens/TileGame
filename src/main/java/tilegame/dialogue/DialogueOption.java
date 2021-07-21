@@ -6,22 +6,17 @@
 package tilegame.dialogue;
 
 /**
- *
  * @author Loes Immens
  */
 public class DialogueOption implements java.io.Serializable
 {
     private String text;
-    private DialogueNode sourceNode;
     private int destinationNodeID;
-    private int optionNr;
     
-    public DialogueOption(String text, DialogueNode sourceNode, int destinationNodeID)
+    public DialogueOption(String text, int destinationNodeID)
     {
         this.text = text;
-        this.sourceNode = sourceNode;
         this.destinationNodeID = destinationNodeID;
-        optionNr = sourceNode.getOptions().size() + 1;
     }
 
     public String getText() 
@@ -38,6 +33,4 @@ public class DialogueOption implements java.io.Serializable
     {
         return "option: " + text;
     }
-    
-    
 }

@@ -5,17 +5,21 @@
  */
 package tilegame.gfx;
 
+import tilegame.game_elements.Ticking;
+
 import java.awt.image.BufferedImage;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public class Animation 
+public class Animation implements Ticking
 {
-    private int speed, index;
-    private long lastTime, timer;
-    private BufferedImage[] frames;
+    private final int speed;
+    private int index;
+    private long lastTime;
+    private long timer;
+    private final BufferedImage[] frames;
     
     public Animation(int speed, BufferedImage[] frames)
     {
@@ -25,7 +29,8 @@ public class Animation
         timer = 0;
         lastTime = System.currentTimeMillis();
     }
-    
+
+    @Override
     public void tick()
     {
         timer += System.currentTimeMillis() - lastTime;

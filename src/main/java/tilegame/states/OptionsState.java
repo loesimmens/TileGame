@@ -18,8 +18,8 @@ import java.util.Map;
  * @author Loes Immens
  */
 public class OptionsState implements State {
-    private final int leftX = Game.getWidth() / 3;
-    private final int rightX = 2 * Game.getWidth() / 3;
+    private final int leftX = Game.getDisplayWidth() / 3;
+    private final int rightX = 2 * Game.getDisplayWidth() / 3;
     private LinkedHashMap<String, String> keySettings;
     
     public OptionsState()
@@ -36,11 +36,11 @@ public class OptionsState implements State {
     @Override
     public void render(Graphics g) 
     {
-        int y = 64;
-        for(Map.Entry me : keySettings.entrySet())
+        var y = 64;
+        for(Map.Entry<String, String> me : keySettings.entrySet())
         {
-            Text.drawString(g, (String)me.getKey(), leftX, y, true, Color.black, Assets.getAssets().font14);
-            Text.drawString(g, (String)me.getValue(), rightX, y, true, Color.blue, Assets.getAssets().font14);
+            Text.drawString(g, me.getKey(), leftX, y, true, Color.black, Assets.getAssets().font14);
+            Text.drawString(g, me.getValue(), rightX, y, true, Color.blue, Assets.getAssets().font14);
             y += 64;
         }
     }

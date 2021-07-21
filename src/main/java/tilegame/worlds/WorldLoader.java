@@ -5,7 +5,6 @@
  */
 package tilegame.worlds;
 
-import tilegame.states.GameState;
 import tilegame.utils.Utils;
 
 /**
@@ -16,27 +15,25 @@ public class WorldLoader
 {   
     private WorldLoader(){}
     
-    public static World loadWorld(GameState gameState, String path)
+    public static void loadWorld(String path)
     {
-        String file = Utils.loadFileAsString(path);
-        String[] tokens = file.split("\\s+"); //split on any white space
-        int width = Integer.parseInt(tokens[0]);
-        World.setWidth(width);
-        int height = Integer.parseInt(tokens[1]);
-        World.setHeight(height);
-        int spawnX = Integer.parseInt(tokens[2]);
-        int spawnY = Integer.parseInt(tokens[3]);
-        
-        int tiles[][] = new int[width][height];
-        for(int y = 0; y < height; y++)
+        var file = Utils.loadFileAsString(path);
+        String[] tokens = file.split("\\s+");
+        var width = Integer.parseInt(tokens[0]);
+        World.setWidthInNTiles(width);
+        var height = Integer.parseInt(tokens[1]);
+        World.setHeightInNTiles(height);
+        var spawnX = Integer.parseInt(tokens[2]);
+        var spawnY = Integer.parseInt(tokens[3]);
+        World.setPlayer(spawnX, spawnY);
+        var tiles = new int[width][height];
+        for(var y = 0; y < height; y++)
         {
-            for(int x = 0; x < width; x++)
+            for(var x = 0; x < width; x++)
             {
-                tiles[x][y] = Utils.parseInt(tokens[(x + y * width) + 4]);
+                tiles[x][y] = Integer.parseInt(tokens[(x + y * width) + 4]);
             }
         }
-        
-        World world = new World(gameState, spawnX, spawnY, tiles);
-        return world;
+        World.setTiles(tiles);
     }
 }

@@ -6,9 +6,11 @@
 package tilegame.dialogue;
 
 import tilegame.Game;
-import tilegame.entities.State;
+import tilegame.entities.EntityState;
 import tilegame.entities.creatures.Player;
 import tilegame.entities.exceptions.PlayerException;
+import tilegame.game_elements.Rendering;
+import tilegame.game_elements.Ticking;
 import tilegame.gfx.Assets;
 import tilegame.gfx.Text;
 import tilegame.logger.TileGameLogger;
@@ -23,7 +25,7 @@ import java.util.logging.Logger;
 /**
  * @author Loes Immens
  */
-public class DialogueBox implements java.io.Serializable, Listener
+public class DialogueBox implements java.io.Serializable, Listener, Ticking, Rendering
 {
     private static final DialogueBox dialogueBox = new DialogueBox();
     private final int x;
@@ -39,17 +41,31 @@ public class DialogueBox implements java.io.Serializable, Listener
     {
         maxTokensPerLine = 55;
         
-        x = (int)(Game.getWidth() * 0.05);
-        y = (int)(Game.getHeight() * 0.75);
-        width = (int)(Game.getWidth() * 0.9);
-        height = (int)(Game.getHeight() * 0.2);
+        x = (int)(Game.getDisplayWidth() * 0.05);
+        y = (int)(Game.getDisplayHeight() * 0.75);
+        width = (int)(Game.getDisplayWidth() * 0.9);
+        height = (int)(Game.getDisplayHeight() * 0.2);
     }
-    
+
+    @Override
     public void tick()
     {
         if(active && dialogue.getCurrentNode() == null)
         {
             active = false;
+        }
+    }
+
+    @Override
+    public void render(Graphics g)
+    {
+        if(active) {
+            if (dialogue.getCurrentNode() == null) {
+                active = false;
+                return;
+            }
+            g.drawImage(Assets.getAssets().imageMap.get("dialogueBox"), x, y, width, height, null);
+            displayCurrentNode(g, dialogue.getCurrentNode());
         }
     }
 
@@ -63,20 +79,7 @@ public class DialogueBox implements java.io.Serializable, Listener
             dialogue.setCurrentNode(1);
         }
     }
-    
-    public void render(Graphics g)
-    {
-        if(!active)
-            return;
-        if(dialogue.getCurrentNode() == null)
-        {
-            active = false;
-            return;
-        }
-        g.drawImage(Assets.getAssets().imageMap.get("dialogueBox"), x, y, width, height, null);
-        displayCurrentNode(g, dialogue.getCurrentNode());
-    }
-    
+
     public void displayCurrentNode(Graphics g, DialogueNode node)
     {
         var optionCounter = 1;
@@ -126,7 +129,7 @@ public class DialogueBox implements java.io.Serializable, Listener
     @Override
     public void update(Object o) {
         try{
-            if(Player.getInstance().getState().equals(State.INTERACTING) && o instanceof Integer){
+            if(Player.getInstance().getState().equals(EntityState.INTERACTING) && o instanceof Integer){
                 int keyCode = (Integer) o;
                 if(keyCode > 0){
                     if(keyCode == KeyEvent.VK_1) //1
@@ -146,6 +149,6 @@ public class DialogueBox implements java.io.Serializable, Listener
     }
 
     public void setDialogue(Dialogue dialogue) {
-        this.dialogue = dialogue;
+        DialogueBox.dialogue = dialogue;
     }
 }

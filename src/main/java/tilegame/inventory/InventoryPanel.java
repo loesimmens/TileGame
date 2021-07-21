@@ -6,43 +6,48 @@
 package tilegame.inventory;
 
 import tilegame.Game;
+import tilegame.game_elements.Rendering;
+import tilegame.game_elements.Ticking;
 import tilegame.gfx.Assets;
 import tilegame.gfx.Text;
-import tilegame.items.Item;
 import tilegame.items.Note;
+import tilegame.logger.TileGameLogger;
 import tilegame.utils.Listener;
 import tilegame.utils.Utils;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.logging.Logger;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public class InventoryPanel implements Listener
+public class InventoryPanel implements Listener, Ticking, Rendering
 {
     private static final InventoryPanel inventoryPanel = new InventoryPanel();
     private static boolean active = false;
     private int selectedItem;
     private int keyCode;
     
-    private final int invX = 64;
-    private final int invY = 48;
-    private final int invWidth = 512;
-    private final int invHeight = 384;
-    private final int invListCenterX = invX + 171;
+    private static final int INV_X = 64;
+    private static final int INV_Y = 48;
+    private static final int INV_WIDTH = 512;
+    private static final int INV_HEIGHT = 384;
+    private static final int INV_LIST_CENTER_X = INV_X + 171;
     
-    private final int invListCenterY = invY + invHeight / 2 + 5;
-    private final int invListSpacing = 30;
-    private final int invImageX = 452;
-    private final int invImageY = 82;
+    private static final int INV_LIST_CENTER_Y = INV_Y + INV_HEIGHT / 2 + 5;
+    private static final int INV_LIST_SPACING = 30;
+    private static final int INV_IMAGE_X = 452;
+    private static final int INV_IMAGE_Y = 82;
     
-    private final int invImageWidth = 64;
-    private final int invImageHeight = 64;
+    private static final int INV_IMAGE_WIDTH = 64;
+    private static final int INV_IMAGE_HEIGHT = 64;
     
-    private final int invCountX = 484;
-    private final int invCountY = 172;
+    private static final int INV_COUNT_X = 484;
+    private static final int INV_COUNT_Y = 172;
+
+    private static final Logger LOGGER = TileGameLogger.getLogger();
     
     private InventoryPanel()
     {
@@ -52,7 +57,8 @@ public class InventoryPanel implements Listener
     public static final InventoryPanel getInstance(){
         return inventoryPanel;
     }
-    
+
+    @Override
     public void tick()
     {
         if(keyCode == KeyEvent.VK_I)
@@ -72,16 +78,14 @@ public class InventoryPanel implements Listener
                 selectedItem = 0;
         }
     }
-    
+
+    @Override
     public void render(Graphics g)
     {
         if(!active)
             return;
         
-//        if(inventory.getInventoryItems().isEmpty()) //todo
-//            return;
-        
-        g.drawImage(Assets.getAssets().imageMap.get("inventoryScreen"), invX, invY, invWidth, invHeight, null);
+        g.drawImage(Assets.getAssets().imageMap.get("inventoryScreen"), INV_X, INV_Y, INV_WIDTH, INV_HEIGHT, null);
         
         if(!Inventory.getInventoryItems().isEmpty())
         {
@@ -90,7 +94,7 @@ public class InventoryPanel implements Listener
         
             if(Inventory.getInventoryItems().get(selectedItem) instanceof Note)
             {
-                Note note = (Note)Inventory.getInventoryItems().get(selectedItem);
+                var note = (Note)Inventory.getInventoryItems().get(selectedItem);
 
                 if(!note.isActive() && keyCode == KeyEvent.VK_E)
                 {
@@ -108,10 +112,10 @@ public class InventoryPanel implements Listener
     
     public void renderSelectedItem(Graphics g)
     {
-        Item item = Inventory.getInventoryItems().get(selectedItem);
-        g.drawImage(item.getTexture(), invImageX, invImageY, invImageWidth, invImageHeight, null);
+        var item = Inventory.getInventoryItems().get(selectedItem);
+        g.drawImage(item.getTexture(), INV_IMAGE_X, INV_IMAGE_Y, INV_IMAGE_WIDTH, INV_IMAGE_HEIGHT, null);
         
-        Text.drawString(g, Integer.toString(item.getCount()), invCountX, invCountY, true, Color.white, Assets.getAssets().font28);
+        Text.drawString(g, Integer.toString(item.getCount()), INV_COUNT_X, INV_COUNT_Y, true, Color.white, Assets.getAssets().font28);
     }
     
     private void renderItemsInInventory(Graphics g) 
@@ -122,25 +126,25 @@ public class InventoryPanel implements Listener
                 continue;
             if(i == 0)
             {
-                Text.drawString(g, "> " + Inventory.getInventoryItems().get(selectedItem + i).getName() + " <", invListCenterX,
-                    invListCenterY + i * invListSpacing, true, Color.yellow, Assets.getAssets().font28);
+                Text.drawString(g, "> " + Inventory.getInventoryItems().get(selectedItem + i).getName() + " <", INV_LIST_CENTER_X,
+                    INV_LIST_CENTER_Y + i * INV_LIST_SPACING, true, Color.yellow, Assets.getAssets().font28);
             }
             else
             {
-                Text.drawString(g, Inventory.getInventoryItems().get(selectedItem + i).getName(), invListCenterX,
-                    invListCenterY + i * invListSpacing, true, Color.white, Assets.getAssets().font28);
+                Text.drawString(g, Inventory.getInventoryItems().get(selectedItem + i).getName(), INV_LIST_CENTER_X,
+                    INV_LIST_CENTER_Y + i * INV_LIST_SPACING, true, Color.white, Assets.getAssets().font28);
             }
         }
     }
     
     private void renderNote(Graphics g) 
     {
-        g.drawImage(Assets.getAssets().imageMap.get("dialogueBox"), 10, 10, Game.getWidth() - 10,
-                Game.getHeight() - 10, null);
-        Note note = (Note)Inventory.getInventoryItems().get(selectedItem);
+        g.drawImage(Assets.getAssets().imageMap.get("dialogueBox"), 10, 10, Game.getDisplayWidth() - 10,
+                Game.getDisplayHeight() - 10, null);
+        var note = (Note)Inventory.getInventoryItems().get(selectedItem);
         String textToDisplay = Utils.cutTextToFitLine(note.getText(), 30);
         
-        int textY = 100;
+        var textY = 100;
         
         for(String line: textToDisplay.split("\n"))
         {
@@ -153,7 +157,6 @@ public class InventoryPanel implements Listener
     public static boolean isActive()
     {
         return active;
-
     }
 
     @Override

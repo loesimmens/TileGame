@@ -6,52 +6,51 @@
 package tilegame.entities;
 
 import tilegame.dialogue.Dialogue;
+import tilegame.game_elements.Rendering;
+import tilegame.game_elements.Ticking;
+import tilegame.logger.TileGameLogger;
 
 import java.awt.*;
+import java.io.Serializable;
+import java.util.logging.Logger;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  *
  */
-public abstract class Entity 
+public abstract class Entity implements Serializable, Ticking, Rendering
 {
-    public static final int DEFAULT_HEALTH = 3;
-    protected float x;
-    protected float y;
+    protected float xLocation;
+    protected float yLocation;
     protected int width;
     protected int height;
     protected int health;
     protected boolean active = true;
     protected Rectangle bounds;
-    
-    protected State state;
-    
+    protected EntityState entityState;
     protected long id;
-    private String name;
+    protected final String name;
     protected Dialogue dialogue;
 
-    public Entity() {}
+    public static final int DEFAULT_HEALTH = 3;
+    protected static final Logger LOGGER = TileGameLogger.getLogger();
     
-    public Entity(float x, float y, int width, int height, long id, String name)
+    protected Entity(float xLocation, float yLocation, int width, int height, long id, String name)
     {
-        this.x = x;
-        this.y = y;
+        this.xLocation = xLocation;
+        this.yLocation = yLocation;
         this.width = width;
         this.height = height;
         health = DEFAULT_HEALTH;
         
         bounds = new Rectangle(0, 0, width, height);
         
-        state = State.IDLE;
+        entityState = EntityState.IDLE;
         
         this.id = id;
         this.name = name;
     }
-    
-    public abstract void tick();
-    
-    public abstract void render(Graphics g);
     
     public abstract void die();
     
@@ -66,42 +65,30 @@ public abstract class Entity
     }
     
     public abstract void interact();
-    
-    public boolean checkEntityCollisions(float xOffset, float yOffset)
-    {
-        for(Entity e : EntityManager.getEntities())
-        {
-            if(e.equals(this))
-                continue;
-            if(e.getCollisionBounds(0f, 0f).intersects(getCollisionBounds(xOffset, yOffset)))
-                return true;
-        }
-        return false;
-    }
-        
+
     public Rectangle getCollisionBounds(float xOffset, float yOffset)
     {
-        return new Rectangle((int) (x + bounds.x + xOffset), (int) (y + bounds.y + yOffset), bounds.width, bounds.height);
+        return new Rectangle((int) (xLocation + bounds.x + xOffset), (int) (yLocation + bounds.y + yOffset), bounds.width, bounds.height);
     }
 
-    public float getX() 
+    public float getxLocation()
     {
-        return x;
+        return xLocation;
     }
 
-    public void setX(float x) 
+    public void setxLocation(float xLocation)
     {
-        this.x = x;
+        this.xLocation = xLocation;
     }
 
-    public float getY() 
+    public float getyLocation()
     {
-        return y;
+        return yLocation;
     }
 
-    public void setY(float y) 
+    public void setyLocation(float yLocation)
     {
-        this.y = y;
+        this.yLocation = yLocation;
     }
 
     public int getWidth() 
@@ -144,12 +131,16 @@ public abstract class Entity
         return active;
     }
 
-    public State getState() {
-        return state;
+    public EntityState getState() {
+        return entityState;
     }
 
-    public void setState(State state)
+    public void setState(EntityState entityState)
     {
-        this.state = state;
+        this.entityState = entityState;
+    }
+
+    public Dialogue getDialogue() {
+        return dialogue;
     }
 }

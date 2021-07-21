@@ -39,7 +39,7 @@ public class Dialogue implements java.io.Serializable
     
     public void addOption(int counter, String text, DialogueNode node, int destinationNodeID)
     {
-        node.getOptions().put(counter, new DialogueOption(text, node, destinationNodeID));
+        node.getOptions().put(counter, new DialogueOption(text, destinationNodeID));
     }
     
     @Override

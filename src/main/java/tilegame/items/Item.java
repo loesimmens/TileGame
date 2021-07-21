@@ -7,6 +7,8 @@ package tilegame.items;
 
 import tilegame.entities.creatures.Player;
 import tilegame.entities.exceptions.PlayerException;
+import tilegame.game_elements.Rendering;
+import tilegame.game_elements.Ticking;
 import tilegame.gfx.Assets;
 import tilegame.gfx.GameCamera;
 import tilegame.inventory.Inventory;
@@ -21,32 +23,29 @@ import java.util.logging.Logger;
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
-public class Item implements java.io.Serializable
+public class Item implements java.io.Serializable, Ticking, Rendering
 {
     private ItemManager itemManager;
     
-    public static Item[] items = new Item[256];
-    public static Item woodItem = new Item(Assets.getAssets().imageMap.get("wood"), "Wood", 0);
-    public static Item rockItem = new Item(Assets.getAssets().imageMap.get("rock"), "Rock", 1);
-    public static Item present = new Item(Assets.getAssets().imageMap.get("present"), "Present", 2);
-    public static Item pan = new Item(Assets.getAssets().imageMap.get("pan"), "pan", 9);
-    //public static Item note = new Item(Assets.getAssets().imageMap.get("note"), "note", 10);
-    public static Item suitcase = new Item(Assets.getAssets().imageMap.get("suitcase"), "suitcase", 12);
+    protected static final Item[] ITEMS = new Item[256];
+    public static final Item woodItem = new Item(Assets.getAssets().imageMap.get("wood"), "Wood", 0);
+    public static final Item rockItem = new Item(Assets.getAssets().imageMap.get("rock"), "Rock", 1);
+    public static final Item present = new Item(Assets.getAssets().imageMap.get("present"), "Present", 2);
+    public static final Item pan = new Item(Assets.getAssets().imageMap.get("pan"), "pan", 9);
+    //public static final Item note = new Item(Assets.getAssets().imageMap.get("note"), "note", 10);
+    public static final Item suitcase = new Item(Assets.getAssets().imageMap.get("suitcase"), "suitcase", 12);
+    private static final int ITEMWIDTH = 32;
+    private static final int ITEMHEIGHT = 32;
     
-    //Class
-    
-    public static final int ITEMWIDTH = 32, ITEMHEIGHT = 32;
-    
-    /**
-     *made transient, because BufferedImage is not Serializable and this field doesn't have to be Serialized.
-     */
     protected transient BufferedImage texture;
     protected String name;
     protected final int id;
     
     protected Rectangle bounds;
     
-    protected int x, y, count;
+    protected int x;
+    protected int y;
+    protected int count;
     protected boolean pickedUp = false;
     protected boolean visible = false;
 
@@ -61,9 +60,10 @@ public class Item implements java.io.Serializable
         
         bounds = new Rectangle(x, y, ITEMWIDTH, ITEMHEIGHT);
         
-        items[id] = this;
+        ITEMS[id] = this;
     }
-    
+
+    @Override
     public void tick()
     {
         try {
@@ -77,6 +77,7 @@ public class Item implements java.io.Serializable
     }
     
     //to render onto the game world
+    @Override
     public void render(Graphics g)
     {
         if(itemManager == null)
@@ -95,7 +96,7 @@ public class Item implements java.io.Serializable
     //for testing purposes
     public Item createNew(int count)
     {
-        Item i = new Item(texture, name, id);
+        var i = new Item(texture, name, id);
         i.setPickedUp(true);
         i.setCount(count);
         return i;
@@ -103,7 +104,7 @@ public class Item implements java.io.Serializable
     
     public Item createNew(int x, int y)
     {
-        Item i = new Item(texture, name, id);
+        var i = new Item(texture, name, id);
         i.setPosition(x, y);
         return i;
     }
@@ -115,17 +116,10 @@ public class Item implements java.io.Serializable
         bounds.x = x;
         bounds.y = y;
     }
-    
-    //GETTERS SETTERS
 
     public BufferedImage getTexture() 
     {
         return texture;
-    }
-
-    public void setTexture(BufferedImage texture) 
-    {
-        this.texture = texture;
     }
 
     public String getName() 
@@ -190,7 +184,4 @@ public class Item implements java.io.Serializable
     {
         this.visible = visible;
     }
-    
-    
-    
 }

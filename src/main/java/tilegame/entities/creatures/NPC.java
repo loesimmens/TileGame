@@ -5,7 +5,7 @@
  */
 package tilegame.entities.creatures;
 
-import tilegame.entities.State;
+import tilegame.entities.EntityState;
 import tilegame.entities.attributes.Talking;
 
 /**
@@ -21,14 +21,14 @@ public class NPC extends Creature implements java.io.Serializable, Talking
     @Override
     public void die() 
     {
-        
+        throw new UnsupportedOperationException();
     }
 
     //todo: implement talk
     @Override
     public void interact()
     {
-        state = State.INTERACTING;
+        entityState = EntityState.INTERACTING;
         talk(id);
     }
 }

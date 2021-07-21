@@ -8,6 +8,7 @@ package tilegame.inventory;
 import tilegame.items.Item;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
@@ -15,23 +16,10 @@ import java.util.ArrayList;
  */
 public class Inventory
 {
-    private static final Inventory inventory = new Inventory();
-    private static ArrayList<Item> inventoryItems;
+    private static List<Item> inventoryItems = new ArrayList<>();
     
-    private Inventory()
-    {
-        inventoryItems = new ArrayList<>();
-    }
-    
-    public void tick()
-    {
-        
-    }
-    
-    public static final Inventory getInstance(){
-        return inventory;
-    }
-    
+    private Inventory() {}
+
     public static void addItem(Item item)
     {
         for(Item i : inventoryItems)
@@ -45,13 +33,13 @@ public class Inventory
         inventoryItems.add(item);
     }
 
-    public static ArrayList<Item> getInventoryItems()
+    public static List<Item> getInventoryItems()
     {
         return inventoryItems;
     }
 
-    public void setInventoryItems(ArrayList<Item> inventoryItems) 
+    public static void setInventoryItems(List<Item> inventoryItems)
     {
-        this.inventoryItems = inventoryItems;
+        Inventory.inventoryItems = inventoryItems;
     }
 }

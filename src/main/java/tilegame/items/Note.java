@@ -8,12 +8,11 @@ package tilegame.items;
 import java.awt.image.BufferedImage;
 
 /**
- *
  * @author Loes Immens
  */
 public class Note extends Item
 {
-    private String text;
+    private final String text;
     private boolean active;
     
     public Note(BufferedImage texture, String name, int id, String text) 
@@ -38,7 +37,4 @@ public class Note extends Item
     {
         return active;
     }
-    
-    
-    
 }

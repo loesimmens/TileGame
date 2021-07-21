@@ -5,11 +5,11 @@
  */
 package tilegame.ui;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import tilegame.gfx.Assets;
 import tilegame.gfx.Text;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  *
@@ -29,9 +29,6 @@ public class UITextButton extends UIObject
         this.clicker = clicker;
         this.text = text;
     }
-
-    @Override
-    public void tick(){}
 
     @Override
     public void render(Graphics g) 

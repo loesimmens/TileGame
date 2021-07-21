@@ -6,6 +6,7 @@
 package tilegame.dialogue;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -15,7 +16,7 @@ public class DialogueNode implements java.io.Serializable
 {
     private int nodeID;
     private String text;
-    private HashMap<Integer, DialogueOption> options;
+    private Map<Integer, DialogueOption> options;
     
     public DialogueNode(int nodeID, String text)
     {
@@ -29,10 +30,8 @@ public class DialogueNode implements java.io.Serializable
     {
         return "node: " + nodeID;
     }
-    
-    //GETTERS SETTERS
 
-    public HashMap<Integer, DialogueOption> getOptions() 
+    public Map<Integer, DialogueOption> getOptions()
     {
         return options;
     }
@@ -40,11 +39,6 @@ public class DialogueNode implements java.io.Serializable
     public int getNodeID() 
     {
         return nodeID;
-    }
-
-    public void setNodeID(int nodeID) 
-    {
-        this.nodeID = nodeID;
     }
 
     public String getText() 
