@@ -34,7 +34,7 @@ public class MenuService {
     }
 
     public void addStartButtonToMenu(int width) {
-        uiManager.addObjectToMenu("startButton", new UITextButton(width / 2 - 80, 256, 160, 32, Assets.getAssets().imageArrayMap.get(BTN_EMPTY), "START", () -> {
+        uiManager.addObjectToMenu("startButton", new UITextButton(width / 2 - 80, 256, 160, 32, Assets.getAssets().IMAGE_ARRAY_MAP.get(BTN_EMPTY), "START", () -> {
             mouseManager.setUIManager(null);
             StateManager.getStateManager().setState(gameState);
         }
@@ -42,7 +42,7 @@ public class MenuService {
     }
 
     public void addLoadButtonToMenu(int width) {
-        uiManager.addObjectToMenu("loadButton", new UITextButton(width / 2 - 80, 304, 160, 32, Assets.getAssets().imageArrayMap.get(BTN_EMPTY), "LOAD", () -> {
+        uiManager.addObjectToMenu("loadButton", new UITextButton(width / 2 - 80, 304, 160, 32, Assets.getAssets().IMAGE_ARRAY_MAP.get(BTN_EMPTY), "LOAD", () -> {
             try {
                 var saveData = SaveService.loadSaveData("1.save");
                 setPlayerSavedData(saveData);
@@ -67,7 +67,7 @@ public class MenuService {
     }
 
     public void addSaveButtonToMenu(int width) {
-        uiManager.addObjectToMenu("saveButton", new UITextButton(width / 2 - 80, 352, 160, 32, Assets.getAssets().imageArrayMap.get(BTN_EMPTY), "SAVE", () -> {
+        uiManager.addObjectToMenu("saveButton", new UITextButton(width / 2 - 80, 352, 160, 32, Assets.getAssets().IMAGE_ARRAY_MAP.get(BTN_EMPTY), "SAVE", () -> {
             var saveData = new SaveData();
             saveData.setName("player");
             try {
@@ -91,7 +91,7 @@ public class MenuService {
     }
 
     public void addOptionsButtonToMenu(int width) {
-        uiManager.addObjectToMenu("optionsButton", new UITextButton(width / 2 - 80, 400, 160, 32, Assets.getAssets().imageArrayMap.get(BTN_EMPTY), "OPTIONS", () -> {
+        uiManager.addObjectToMenu("optionsButton", new UITextButton(width / 2 - 80, 400, 160, 32, Assets.getAssets().IMAGE_ARRAY_MAP.get(BTN_EMPTY), "OPTIONS", () -> {
             mouseManager.setUIManager(null);
             StateManager.getStateManager().setState(optionsState);
         }

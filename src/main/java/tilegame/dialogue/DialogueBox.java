@@ -64,7 +64,7 @@ public class DialogueBox implements java.io.Serializable, Listener, Ticking, Ren
                 active = false;
                 return;
             }
-            g.drawImage(Assets.getAssets().imageMap.get("dialogueBox"), x, y, width, height, null);
+            g.drawImage(Assets.getAssets().IMAGE_MAP.get("dialogueBox"), x, y, width, height, null);
             displayCurrentNode(g, dialogue.getCurrentNode());
         }
     }
@@ -90,7 +90,7 @@ public class DialogueBox implements java.io.Serializable, Listener, Ticking, Ren
         
         for(String line: textToDisplay.split("\n"))
         {
-            Text.drawString(g, line, textX, textY, false, Color.black, Assets.getAssets().font14);
+            Text.drawString(g, line, textX, textY, false, Color.black, Assets.getAssets().FONT_14);
             textY += 15;
         }
         
@@ -102,9 +102,9 @@ public class DialogueBox implements java.io.Serializable, Listener, Ticking, Ren
             for(String line: textToDisplay.split("\n"))
             {
                 if(firstLine)
-                    Text.drawString(g, optionCounter + ". " + line, textX, textY, false, Color.blue, Assets.getAssets().font14);
+                    Text.drawString(g, optionCounter + ". " + line, textX, textY, false, Color.blue, Assets.getAssets().FONT_14);
                 else
-                    Text.drawString(g, "   " + line, textX, textY, false, Color.blue, Assets.getAssets().font14);
+                    Text.drawString(g, "   " + line, textX, textY, false, Color.blue, Assets.getAssets().FONT_14);
                 firstLine = false;
                 textY += 15;
             }
