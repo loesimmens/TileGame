@@ -42,7 +42,7 @@ public class StaticEntity extends Entity implements java.io.Serializable
     @Override
     public void render(Graphics g) 
     {
-        g.drawImage(Assets.getAssets().imageMap.get(name), (int) (xLocation - GameCamera.getxOffset()),
+        g.drawImage(Assets.getAssets().IMAGE_MAP.get(name), (int) (xLocation - GameCamera.getxOffset()),
                 (int) (yLocation - GameCamera.getyOffset()), width, height, null);
     }
 

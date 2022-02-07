@@ -39,8 +39,8 @@ public class OptionsState implements State {
         var y = 64;
         for(Map.Entry<String, String> me : keySettings.entrySet())
         {
-            Text.drawString(g, me.getKey(), leftX, y, true, Color.black, Assets.getAssets().font14);
-            Text.drawString(g, me.getValue(), rightX, y, true, Color.blue, Assets.getAssets().font14);
+            Text.drawString(g, me.getKey(), leftX, y, true, Color.black, Assets.getAssets().FONT_14);
+            Text.drawString(g, me.getValue(), rightX, y, true, Color.blue, Assets.getAssets().FONT_14);
             y += 64;
         }
     }

@@ -19,11 +19,13 @@ public class Tile
         
     protected BufferedImage texture;
     protected final int id;
+    protected final TileType type;
     protected boolean solid;
     
-    public Tile(BufferedImage texture, int id, boolean solid)
+    public Tile(BufferedImage texture, int id, TileType type, boolean solid)
     {
         this.texture = texture;
+        this.type = type;
         this.id = id;
         this.solid = solid;
     }

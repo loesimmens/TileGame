@@ -27,11 +27,11 @@ public class MenuState implements State {
     @Override
     public void render(Graphics g) 
     {
-        g.drawImage(Assets.getAssets().creatureAnimMap.get(1).get("down")[0], 
+        g.drawImage(Assets.getAssets().CREATURE_ANIM_MAP.get(1).get("down")[0],
                 128, 96, Creature.DEFAULT_CREATURE_WIDTH * 2, Creature.DEFAULT_CREATURE_HEIGHT * 2, null);
-        g.drawImage(Assets.getAssets().creatureAnimMap.get(0).get("down")[0], 
+        g.drawImage(Assets.getAssets().CREATURE_ANIM_MAP.get(0).get("down")[0],
                 256, 64, Creature.DEFAULT_CREATURE_WIDTH * 2, Creature.DEFAULT_CREATURE_HEIGHT * 2, null);
-        g.drawImage(Assets.getAssets().creatureAnimMap.get(2).get("down")[0], 
+        g.drawImage(Assets.getAssets().CREATURE_ANIM_MAP.get(2).get("down")[0],
                 384, 96, Creature.DEFAULT_CREATURE_WIDTH * 2, Creature.DEFAULT_CREATURE_HEIGHT * 2, null);
         
         //Text.drawString(g, "Liekes verjaardag!", 152, 256, false, Color.red, Assets.getAssets().font28); //todo: remove

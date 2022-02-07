@@ -39,12 +39,12 @@ public class UITextButton extends UIObject
         if(hovering)
         {
             g.drawImage(images[1], (int) x, (int) y, width, height, null); //emphasized button image
-            Text.drawString(g, text, textX, textY, true, Color.cyan, Assets.getAssets().font28);
+            Text.drawString(g, text, textX, textY, true, Color.cyan, Assets.getAssets().FONT_28);
         }
         else
         {
             g.drawImage(images[0], (int) x, (int) y, width, height, null); //regular button image
-            Text.drawString(g, text, textX, textY, true, Color.black, Assets.getAssets().font28);
+            Text.drawString(g, text, textX, textY, true, Color.black, Assets.getAssets().FONT_28);
         }
     }
 

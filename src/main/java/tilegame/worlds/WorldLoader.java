@@ -6,6 +6,7 @@
 package tilegame.worlds;
 
 import tilegame.utils.Utils;
+import tilegame.worlds.regions.Region;
 
 /**
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
@@ -34,6 +35,9 @@ public class WorldLoader
                 tiles[x][y] = Integer.parseInt(tokens[(x + y * width) + 4]);
             }
         }
-        World.setTiles(tiles);
+        int regionId = World.getnRegions();
+        Region region = new Region(regionId);
+        region.setTilesFromValues(tiles);
+        World.addRegion(region);
     }
 }
