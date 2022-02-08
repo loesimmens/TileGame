@@ -77,7 +77,7 @@ public class Game implements Ticking
             player = Player.getInstance();
             List<Integer> keysSubscribedTo = List.of(KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_E, KeyEvent.VK_X, -1);
             KeyManager.subscribe(player, keysSubscribedTo);
-            LOGGER.info("Player has subscribed to keys {}" + keysSubscribedTo);
+            LOGGER.info("Player has subscribed to keys " + keysSubscribedTo);
         } catch (PlayerException e) {
             LOGGER.log(Level.SEVERE, PLAYER_NOT_CREATED_YET, e);
         }
