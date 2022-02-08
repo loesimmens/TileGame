@@ -58,10 +58,10 @@ public abstract class Creature extends Entity implements Ticking, Rendering
         
         facing = Direction.DOWN;
 
-        animDown = new Animation(400, Assets.getAssets().creatureAnimMap.get(id).get("down"));
-        animUp = new Animation(400, Assets.getAssets().creatureAnimMap.get(id).get("up"));
-        animLeft = new Animation(400, Assets.getAssets().creatureAnimMap.get(id).get("left"));
-        animRight = new Animation(400, Assets.getAssets().creatureAnimMap.get(id).get("right"));
+        animDown = new Animation(400, Assets.getAssets().CREATURE_ANIM_MAP.get(id).get("down"));
+        animUp = new Animation(400, Assets.getAssets().CREATURE_ANIM_MAP.get(id).get("up"));
+        animLeft = new Animation(400, Assets.getAssets().CREATURE_ANIM_MAP.get(id).get("left"));
+        animRight = new Animation(400, Assets.getAssets().CREATURE_ANIM_MAP.get(id).get("right"));
     }
     
     @Override
@@ -185,8 +185,7 @@ public abstract class Creature extends Entity implements Ticking, Rendering
         return yMove > 0;
     }
 
-    private BufferedImage getCurrentAnimationFrame()
-    {
+    private BufferedImage getCurrentAnimationFrame() {
         switch(facing)
         {
             case LEFT:
@@ -200,9 +199,8 @@ public abstract class Creature extends Entity implements Ticking, Rendering
         }
     }
     
-    protected boolean tilePassable(int x, int y)
-    {
-        return !World.getTile(x, y).isSolid();
+    protected boolean tilePassable(int x, int y) {
+        return !World.getTile(World.getActiveRegionId(), x, y).isSolid();
     }
 
     protected void attack(Entity e) {

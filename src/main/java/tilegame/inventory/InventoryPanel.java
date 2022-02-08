@@ -85,7 +85,7 @@ public class InventoryPanel implements Listener, Ticking, Rendering
         if(!active)
             return;
         
-        g.drawImage(Assets.getAssets().imageMap.get("inventoryScreen"), INV_X, INV_Y, INV_WIDTH, INV_HEIGHT, null);
+        g.drawImage(Assets.getAssets().IMAGE_MAP.get("inventoryScreen"), INV_X, INV_Y, INV_WIDTH, INV_HEIGHT, null);
         
         if(!Inventory.getInventoryItems().isEmpty())
         {
@@ -115,7 +115,7 @@ public class InventoryPanel implements Listener, Ticking, Rendering
         var item = Inventory.getInventoryItems().get(selectedItem);
         g.drawImage(item.getTexture(), INV_IMAGE_X, INV_IMAGE_Y, INV_IMAGE_WIDTH, INV_IMAGE_HEIGHT, null);
         
-        Text.drawString(g, Integer.toString(item.getCount()), INV_COUNT_X, INV_COUNT_Y, true, Color.white, Assets.getAssets().font28);
+        Text.drawString(g, Integer.toString(item.getCount()), INV_COUNT_X, INV_COUNT_Y, true, Color.white, Assets.getAssets().FONT_28);
     }
     
     private void renderItemsInInventory(Graphics g) 
@@ -127,19 +127,19 @@ public class InventoryPanel implements Listener, Ticking, Rendering
             if(i == 0)
             {
                 Text.drawString(g, "> " + Inventory.getInventoryItems().get(selectedItem + i).getName() + " <", INV_LIST_CENTER_X,
-                    INV_LIST_CENTER_Y + i * INV_LIST_SPACING, true, Color.yellow, Assets.getAssets().font28);
+                    INV_LIST_CENTER_Y + i * INV_LIST_SPACING, true, Color.yellow, Assets.getAssets().FONT_28);
             }
             else
             {
                 Text.drawString(g, Inventory.getInventoryItems().get(selectedItem + i).getName(), INV_LIST_CENTER_X,
-                    INV_LIST_CENTER_Y + i * INV_LIST_SPACING, true, Color.white, Assets.getAssets().font28);
+                    INV_LIST_CENTER_Y + i * INV_LIST_SPACING, true, Color.white, Assets.getAssets().FONT_28);
             }
         }
     }
     
     private void renderNote(Graphics g) 
     {
-        g.drawImage(Assets.getAssets().imageMap.get("dialogueBox"), 10, 10, Game.getDisplayWidth() - 10,
+        g.drawImage(Assets.getAssets().IMAGE_MAP.get("dialogueBox"), 10, 10, Game.getDisplayWidth() - 10,
                 Game.getDisplayHeight() - 10, null);
         var note = (Note)Inventory.getInventoryItems().get(selectedItem);
         String textToDisplay = Utils.cutTextToFitLine(note.getText(), 30);
@@ -148,7 +148,7 @@ public class InventoryPanel implements Listener, Ticking, Rendering
         
         for(String line: textToDisplay.split("\n"))
         {
-            Text.drawString(g, line, 64, textY, false, Color.black, Assets.getAssets().font28);
+            Text.drawString(g, line, 64, textY, false, Color.black, Assets.getAssets().FONT_28);
             textY += 32; 
         }
         

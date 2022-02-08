@@ -31,10 +31,10 @@ public class Cat extends StaticEntity implements Talking, Ticking, Rendering
     public void render(Graphics g)
     {
         if(id == 3)
-            g.drawImage(Assets.getAssets().imageMap.get("cat1"), (int) (xLocation - GameCamera.getxOffset()),
+            g.drawImage(Assets.getAssets().IMAGE_MAP.get("cat1"), (int) (xLocation - GameCamera.getxOffset()),
                 (int) (yLocation - GameCamera.getyOffset()), width, height, null);
         else if(id == 4)
-            g.drawImage(Assets.getAssets().imageMap.get("cat2"), (int) (xLocation - GameCamera.getxOffset()),
+            g.drawImage(Assets.getAssets().IMAGE_MAP.get("cat2"), (int) (xLocation - GameCamera.getxOffset()),
                 (int) (yLocation - GameCamera.getyOffset()), width, height, null);
     }
 

@@ -28,12 +28,12 @@ public class Item implements java.io.Serializable, Ticking, Rendering
     private ItemManager itemManager;
     
     protected static final Item[] ITEMS = new Item[256];
-    public static final Item woodItem = new Item(Assets.getAssets().imageMap.get("wood"), "Wood", 0);
-    public static final Item rockItem = new Item(Assets.getAssets().imageMap.get("rock"), "Rock", 1);
-    public static final Item present = new Item(Assets.getAssets().imageMap.get("present"), "Present", 2);
-    public static final Item pan = new Item(Assets.getAssets().imageMap.get("pan"), "pan", 9);
+    public static final Item woodItem = new Item(Assets.getAssets().IMAGE_MAP.get("wood"), "Wood", 0);
+    public static final Item rockItem = new Item(Assets.getAssets().IMAGE_MAP.get("rock"), "Rock", 1);
+    public static final Item present = new Item(Assets.getAssets().IMAGE_MAP.get("present"), "Present", 2);
+    public static final Item pan = new Item(Assets.getAssets().IMAGE_MAP.get("pan"), "pan", 9);
     //public static final Item note = new Item(Assets.getAssets().imageMap.get("note"), "note", 10);
-    public static final Item suitcase = new Item(Assets.getAssets().imageMap.get("suitcase"), "suitcase", 12);
+    public static final Item suitcase = new Item(Assets.getAssets().IMAGE_MAP.get("suitcase"), "suitcase", 12);
     private static final int ITEMWIDTH = 32;
     private static final int ITEMHEIGHT = 32;
     

@@ -1,5 +1,6 @@
 package tilegame.logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.logging.FileHandler;
@@ -19,6 +20,8 @@ public class TileGameLogger {
         logDate = logDate.replace(":","");
 
         try {
+            File file = new File("target/logging");
+            file.mkdirs();
             fh = new FileHandler("target/logging/log-" + logDate + ".log");
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
