@@ -5,6 +5,7 @@
  */
 package tilegame;
 
+import org.springframework.stereotype.Controller;
 import tilegame.dialogue.DialogueBox;
 import tilegame.display.Display;
 import tilegame.entities.creatures.Player;
@@ -31,6 +32,7 @@ import java.util.logging.Logger;
  * based on CodeNMore's tutorial, see: https://github.com/CodeNMore/New-Beginner-Java-Game-Programming-Src
  * expanded on by Loes Immens
  */
+@Controller
 public class Game implements Ticking
 {
     private static final Game game = new Game();
@@ -75,7 +77,7 @@ public class Game implements Ticking
             player = Player.getInstance();
             List<Integer> keysSubscribedTo = List.of(KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_E, KeyEvent.VK_X, -1);
             KeyManager.subscribe(player, keysSubscribedTo);
-            LOGGER.info("Player has subscribed to keys " + keysSubscribedTo);
+            LOGGER.info("Player has subscribed to keys {}" + keysSubscribedTo);
         } catch (PlayerException e) {
             LOGGER.log(Level.SEVERE, PLAYER_NOT_CREATED_YET, e);
         }
